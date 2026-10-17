@@ -7,9 +7,10 @@ EN: D&D 4e character sheets and notes, running locally (Node + browser). This re
 the app needs to run complete: code, compendium, rules and Portuguese translation.
 
 ## Instalar / Install
-1. Instale o Node 24+ / Install Node 24+.
-2. `git clone` este repo.
-3. `npm install --omit=dev` e `node server.js`, abra http://localhost:3102.
+1. `git clone` este repo.
+2. Dê dois cliques em `Iniciar Grimorio.bat` (instala o Node 24+ via winget se faltar, roda `npm install` e abre http://localhost:3102). Ou manualmente: Node 24+, `npm install --omit=dev`, `node server.js`.
+
+Double-click `Iniciar Grimorio.bat` (installs Node via winget if missing, runs `npm install`, opens http://localhost:3102). Or manually: Node 24+, `npm install --omit=dev`, `node server.js`.
 
 Os dados do usuário ficam em `dados/` (não vai para o Git). / User data lives in `dados/` (not in Git).
 
