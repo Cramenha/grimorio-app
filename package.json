@@ -56,7 +56,8 @@
       "oneClick": true,
       "perMachine": false,
       "shortcutName": "Grimório do Aventureiro",
-      "deleteAppDataOnUninstall": false
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/installer.ico"
     },
     "publish": {
       "provider": "github",
