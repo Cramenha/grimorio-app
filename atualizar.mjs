@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
-export const REPO = 'Cramenha/grimorio-app';
+export const REPO = 'Cramenha/grimorio-do-aventureiro';
 const ASSET = /atualizacao.*\.zip$/i; // Grimorio-atualizacao-vX.Y.Z.zip (sem o runtime do Node)
 
 const partes = (v) => String(v).replace(/^v/i, '').split('.').map((n) => parseInt(n, 10) || 0);
