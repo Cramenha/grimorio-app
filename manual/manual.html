@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Grimório do Aventureiro — Manual do Usuário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --perg:#f2e4c0; --perg2:#e7d3a2; --perg3:#d9bf85;
+  --tinta:#2b1a0e; --tinta2:#5a3d22;
+  --sangue:#8e1b1b; --sangue2:#b02a2a;
+  --ouro:#b8861b; --ouro2:#e0b64a;
+  --couro:#1a110b; --couro2:#2b1c12;
+  --fonte-titulo:'Cinzel',serif; --fonte-corpo:'Crimson Pro',Georgia,serif;
+  --canto:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 26 26' fill='none' stroke='%234a2f19' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 25V7Q1 1 7 1H25' stroke-width='1.8'/%3E%3Cpath d='M6 25V12Q6 6 12 6H25' stroke-width='.8' opacity='.65'/%3E%3Cpath d='M9 5.6L12.4 9 9 12.4 5.6 9Z' fill='%23b8861b' stroke-width='.7'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#0c0806}
+body{font-family:var(--fonte-corpo);color:var(--tinta);font-size:12.3pt;line-height:1.5}
+@page{size:A4;margin:0}
+h1,h2,h3,h4,.tit{font-family:var(--fonte-titulo);letter-spacing:.03em}
+
+/* ---------- página A4 fixa ---------- */
+.pagina{
+  position:relative; width:210mm; height:297mm; overflow:hidden;
+  page-break-after:always; break-after:page;
+  background:
+    radial-gradient(ellipse at 20% 15%, rgba(255,255,255,.18), transparent 55%),
+    radial-gradient(ellipse at 85% 90%, rgba(0,0,0,.08), transparent 55%),
+    var(--perg);
+  border:3px solid var(--tinta);
+}
+.pagina:last-child{page-break-after:avoid}
+.pagina::before{ /* moldura interna fina */
+  content:''; position:absolute; inset:9mm; border:1.4px solid var(--tinta2); opacity:.55; pointer-events:none;
+}
+.pagina::after{content:none}
+.canto{position:absolute; width:30px; height:30px; background:var(--canto) center/contain no-repeat; opacity:.9}
+.canto.tl{top:6mm; left:6mm}
+.canto.tr{top:6mm; right:6mm; transform:scaleX(-1)}
+.canto.bl{bottom:6mm; left:6mm; transform:scaleY(-1)}
+.canto.br{bottom:6mm; right:6mm; transform:scale(-1,-1)}
+
+.miolo{position:absolute; inset:16mm 17mm 15mm 17mm; display:flex; flex-direction:column}
+.cabecalho{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px double var(--ouro); padding-bottom:3mm; margin-bottom:6mm; font-family:var(--fonte-titulo); font-size:8.3pt; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta2)}
+.cabecalho b{color:var(--sangue); letter-spacing:.06em}
+.corpo{flex:1; overflow:hidden}
+.rodape{display:flex; justify-content:space-between; align-items:center; border-top:2px double var(--ouro); padding-top:2.5mm; margin-top:5mm; font-family:var(--fonte-titulo); font-size:7.6pt; letter-spacing:.1em; color:var(--tinta2); text-transform:uppercase}
+.rodape .pag{color:var(--ouro); font-weight:700}
+
+/* ---------- títulos ---------- */
+h1.titulo-secao{font-size:24pt; color:var(--sangue); margin:0 0 1mm; text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.numero-secao{font-family:var(--fonte-titulo); color:var(--ouro); font-size:10.5pt; letter-spacing:.2em; text-transform:uppercase; margin-bottom:1.5mm}
+.lead{font-style:italic; color:var(--tinta2); font-size:12.6pt; margin:2mm 0 6mm; border-left:3px solid var(--ouro); padding-left:5mm}
+h2.sub{font-size:14.5pt; color:var(--sangue2); border-bottom:1.6px solid var(--tinta); padding-bottom:1.2mm; margin:5mm 0 3mm}
+h3.sub3{font-family:var(--fonte-titulo); font-size:11.5pt; color:var(--tinta); margin:4mm 0 1.5mm}
+p{margin:0 0 2.6mm}
+ul,ol{margin:0 0 3mm; padding-left:5mm}
+li{margin-bottom:1.2mm}
+b,strong{color:var(--tinta)}
+.destaque{color:var(--sangue); font-weight:700}
+code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,26,14,.08); border:1px solid rgba(43,26,14,.22); border-radius:3px; padding:0 .35em; font-size:.92em}
+
+/* ---------- caixas ---------- */
+.caixa{border-radius:6px; padding:3mm 4.5mm; margin:3mm 0; font-size:11pt}
+.caixa-dica{background:rgba(184,134,27,.12); border:1.4px solid var(--ouro)}
+.caixa-dica .rot{font-family:var(--fonte-titulo); color:var(--ouro); font-weight:700; font-size:9.5pt; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1mm}
+.caixa-importante{background:rgba(142,27,27,.09); border:1.4px solid var(--sangue)}
+.caixa-importante .rot{font-family:var(--fonte-titulo); color:var(--sangue); font-weight:700; font-size:9.5pt; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1mm}
+.caixa-exemplo{background:var(--couro); color:#e9d9a8; border:1.4px solid var(--ouro); border-radius:6px; padding:3mm 4.5mm; font-family:'Consolas','Courier New',monospace; font-size:9.6pt; line-height:1.55; margin:3mm 0; white-space:pre-wrap; word-break:break-word}
+.caixa-exemplo .rot{font-family:var(--fonte-titulo); color:var(--ouro2); font-weight:700; font-size:9pt; letter-spacing:.08em; text-transform:uppercase; margin-bottom:1.5mm}
+.caixa-exemplo .q{color:#f0c86a}
+.caixa-exemplo .n{color:#9fd49f}
+
+/* ---------- passos numerados ---------- */
+.passos{list-style:none; padding:0; margin:3mm 0}
+.passos li{display:flex; gap:3.5mm; margin-bottom:2.6mm; align-items:flex-start}
+.selo{flex:none; width:7mm; height:7mm; border-radius:50%; background:radial-gradient(var(--ouro2),var(--ouro)); color:var(--tinta); font-family:var(--fonte-titulo); font-weight:700; font-size:9.5pt; display:grid; place-items:center; box-shadow:0 1px 2px rgba(0,0,0,.4)}
+
+/* ---------- grade de funções ---------- */
+.grade{display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin:3mm 0}
+.grade.c3{grid-template-columns:1fr 1fr 1fr}
+.fcard{border:1.4px solid var(--tinta2); border-radius:6px; padding:2.6mm 3.4mm; background:rgba(255,255,255,.28)}
+.fcard .ic{font-size:14pt; margin-bottom:.8mm}
+.fcard .tit{font-family:var(--fonte-titulo); font-weight:700; font-size:10.3pt; color:var(--sangue); margin-bottom:.6mm}
+.fcard p{font-size:10.3pt; margin:0}
+
+/* ---------- botão ilustrativo ---------- */
+.botao-mini{display:inline-block; font-family:var(--fonte-titulo); font-weight:700; font-size:9.6pt; letter-spacing:.04em; padding:.9mm 2.6mm; border-radius:4px; border:1.6px solid var(--tinta); background:linear-gradient(var(--ouro2),var(--ouro)); color:var(--tinta)}
+.botao-mini.sec{background:linear-gradient(var(--perg),var(--perg3))}
+
+/* ---------- capa ---------- */
+.capa{display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:0 20mm}
+.capa .emblema{font-size:58pt; margin-bottom:4mm; filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.capa .titulo-capa{font-size:40pt; color:var(--sangue); line-height:1.08; margin-bottom:3mm; text-shadow:0 2px 0 rgba(255,255,255,.35)}
+.capa .sub-capa{font-family:var(--fonte-titulo); font-size:15pt; letter-spacing:.3em; text-transform:uppercase; color:var(--tinta2); margin-bottom:10mm}
+.capa .linha-orn{width:60mm; height:2px; background:linear-gradient(90deg,transparent,var(--ouro),transparent); margin:6mm 0}
+.capa .rodape-capa{position:absolute; bottom:14mm; font-family:var(--fonte-titulo); font-size:9.5pt; letter-spacing:.14em; color:var(--tinta2); text-transform:uppercase}
+
+/* ---------- sumário ---------- */
+.sumario{column-count:2; column-gap:10mm}
+.sitem{display:flex; align-items:baseline; gap:2mm; margin-bottom:3.2mm; break-inside:avoid}
+.sitem .sn{font-family:var(--fonte-titulo); color:var(--ouro); font-weight:700; font-size:10.5pt; flex:none; width:6mm}
+.sitem .st{font-weight:600; color:var(--tinta); font-size:10.8pt}
+.sitem .sd{flex:1; border-bottom:1.6px dotted var(--tinta2); margin:0 1.5mm; transform:translateY(-1.5px)}
+.sitem .sp{font-family:var(--fonte-titulo); font-size:9.5pt; color:var(--tinta2)}
+
+/* ---------- página final ---------- */
+.final{display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:0 22mm}
+.final .emblema{font-size:40pt; margin-bottom:5mm}
+.final h2{font-size:19pt; color:var(--sangue); margin-bottom:4mm}
+.final p{font-size:12.6pt; max-width:140mm}
+.assinatura{margin-top:12mm; font-family:var(--fonte-titulo); font-size:15pt; letter-spacing:.1em; color:var(--ouro)}
+.assinatura small{display:block; font-size:9pt; letter-spacing:.2em; color:var(--tinta2); margin-top:1.5mm; text-transform:uppercase}
+
+.tag-roll{display:inline-block; font-family:var(--fonte-titulo); font-weight:700; font-size:8.5pt; letter-spacing:.06em; color:var(--tinta); background:linear-gradient(var(--ouro2),var(--ouro)); border:1.3px solid var(--tinta); border-radius:4px; padding:.5mm 2mm; vertical-align:middle}
+</style>
+</head>
+<body>
+
+<!-- ============================================================ CAPA -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="capa">
+    <div class="emblema">⚔</div>
+    <div class="titulo-capa">GRIMÓRIO<br>DO AVENTUREIRO</div>
+    <div class="sub-capa">Manual do Usuário</div>
+    <div class="linha-orn"></div>
+    <p style="font-style:italic;color:var(--tinta2);font-size:12.5pt;max-width:120mm">
+      Fichas, poderes e magia de bolso para o seu D&amp;D 4ª edição — do papel à mesa, do Roll20 à aventura.
+    </p>
+    <div class="rodape-capa">Guia completo de funções e macros</div>
+  </div>
+</div>
+
+<!-- ============================================================ SUMÁRIO -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Grimório do Aventureiro</span><b>Sumário</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Índice</div>
+      <h1 class="titulo-secao">Sumário</h1>
+      <div class="lead">Dezoito capítulos, do primeiro clique à macro perfeita no Roll20.</div>
+      <div class="sumario">
+        <div class="sitem"><span class="sn">01</span><span class="st">Primeiros passos</span><span class="sd"></span><span class="sp">04</span></div>
+        <div class="sitem"><span class="sn">02</span><span class="st">Criando e importando fichas</span><span class="sd"></span><span class="sp">05</span></div>
+        <div class="sitem"><span class="sn">03</span><span class="st">A ficha do personagem</span><span class="sd"></span><span class="sp">06</span></div>
+        <div class="sitem"><span class="sn">04</span><span class="st">Atributos, defesas e cálculo automático</span><span class="sd"></span><span class="sp">07</span></div>
+        <div class="sitem"><span class="sn">05</span><span class="st">Inventário: comprar e equipar</span><span class="sd"></span><span class="sp">08</span></div>
+        <div class="sitem"><span class="sn">06</span><span class="st">Augments: joias de poder 💎</span><span class="sd"></span><span class="sp">09</span></div>
+        <div class="sitem"><span class="sn">07</span><span class="st">Seus números com cada arma</span><span class="sd"></span><span class="sp">10</span></div>
+        <div class="sitem"><span class="sn">08</span><span class="st">O Grimório de poderes</span><span class="sd"></span><span class="sp">11</span></div>
+        <div class="sitem"><span class="sn">09</span><span class="st">Anotações flutuantes</span><span class="sd"></span><span class="sp">12</span></div>
+        <div class="sitem"><span class="sn">10</span><span class="st">Criaturas do mestre</span><span class="sd"></span><span class="sp">13</span></div>
+        <div class="sitem"><span class="sn">11</span><span class="st">Exportando a ficha</span><span class="sd"></span><span class="sp">14</span></div>
+        <div class="sitem"><span class="sn">12</span><span class="st">★ O auge: macros para o Roll20</span><span class="sd"></span><span class="sp">15</span></div>
+        <div class="sitem"><span class="sn">13</span><span class="st">★ Magia, item e joia na macro</span><span class="sd"></span><span class="sp">16</span></div>
+        <div class="sitem"><span class="sn">14</span><span class="st">★ Perguntas inteligentes na rolagem</span><span class="sd"></span><span class="sp">17</span></div>
+        <div class="sitem"><span class="sn">15</span><span class="st">A ficha inteira dentro do Roll20</span><span class="sd"></span><span class="sp">18</span></div>
+        <div class="sitem"><span class="sn">16</span><span class="st">Seus dados estão seguros</span><span class="sd"></span><span class="sp">19</span></div>
+        <div class="sitem"><span class="sn">17</span><span class="st">Mantendo o Grimório atualizado</span><span class="sd"></span><span class="sp">20</span></div>
+        <div class="sitem"><span class="sn">18</span><span class="st">Dicas rápidas e perguntas frequentes</span><span class="sd"></span><span class="sp">21</span></div>
+      </div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">ii</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 01 PRIMEIROS PASSOS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 01</span><b>Primeiros passos</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 01</div>
+      <h1 class="titulo-secao">Primeiros passos</h1>
+      <div class="lead">Sem instalar nada complicado: dê dois cliques e comece a jogar.</div>
+
+      <h2 class="sub">Abrindo o programa</h2>
+      <p>O Grimório roda sozinho no seu computador, sem precisar de internet depois de instalado e sem login. Dê dois cliques no atalho <b>Grimório do Aventureiro</b> na área de trabalho (ou no arquivo <b>Grimorio.exe</b>, se você recebeu a versão em pasta): um ícone aparece na bandeja do sistema e o programa abre sozinho no seu navegador, em <code>http://localhost:3102</code>.</p>
+      <p>Para fechar de verdade, clique com o botão direito no ícone da bandeja e escolha <b>Sair</b>. Só fechar a aba do navegador deixa o programa rodando em segundo plano — o que é útil: ele continua salvando tudo.</p>
+
+      <h2 class="sub">A tela inicial</h2>
+      <p>É o ponto de partida de cada sessão. Nela você encontra:</p>
+      <div class="grade">
+        <div class="fcard"><div class="ic">📜</div><div class="tit">Seus personagens</div><p>Um cartão por ficha, com retrato, nome, classe e nível. Clique para abrir.</p></div>
+        <div class="fcard"><div class="ic">🐉</div><div class="tit">Criaturas do mestre</div><p>Monstros e chefes que você mesmo criou, prontos para a mesa.</p></div>
+        <div class="fcard"><div class="ic">🛡</div><div class="tit">Seus dados</div><p>Mostra onde tudo é salvo e dá acesso a backup, restauração e lixeira.</p></div>
+        <div class="fcard"><div class="ic">⚙</div><div class="tit">Configurações</div><p>Preferências gerais do programa.</p></div>
+      </div>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Troque o idioma dos textos do compêndio (poderes, talentos, itens) a qualquer momento pelo botão <span class="botao-mini sec">🌐 Português</span> no topo da tela — um clique alterna para inglês e volta.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">04</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 02 CRIANDO E IMPORTANDO -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 02</span><b>Criando e importando fichas</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 02</div>
+      <h1 class="titulo-secao">Criando e importando fichas</h1>
+      <div class="lead">Comece do zero ou traga um personagem que já existe.</div>
+
+      <h2 class="sub">Novo personagem</h2>
+      <p>O botão <b>+ Novo personagem</b> abre uma ficha em branco. Escolha raça, classe, caminho exemplar, destino épico, tema, antecedente e divindade por um buscador com filtros — tudo em português, com o texto original logo ao lado.</p>
+
+      <h2 class="sub">Importando um arquivo que você já tem</h2>
+      <p>O botão <b>⬆ Importar</b> aceita três formatos:</p>
+      <ul>
+        <li><b>.dnd4e</b> — o arquivo de personagem mais comum de ferramentas de criação de fichas para 4ª edição. Entra inteiro: atributos, talentos, poderes, inventário, diário de aventura e tudo mais.</li>
+        <li><b>.json</b> — o formato de exportação do próprio Grimório. Ideal para passar uma ficha de um computador para outro, ou enviar para um amigo abrir no programa dele.</li>
+        <li><b>PDF editável</b> — o PDF gerado pelo próprio Grimório (capítulo 11). Reabre a ficha completa e já aplica qualquer edição que você tenha feito nos campos do PDF.</li>
+      </ul>
+
+      <div class="caixa-importante"><div class="rot">⚠ Atenção</div>Importar um personagem com o <b>mesmo nome</b> de uma ficha que já existe pergunta se você quer <b>atualizar</b> (mantém todas as suas anotações) ou <b>criar outra</b> ficha separada. Escolha atualizar sempre que for só trazer uma versão mais nova do mesmo personagem.</div>
+
+      <h2 class="sub">Nova criatura</h2>
+      <p>Ao lado de Novo personagem fica o botão <b>🐉 Nova criatura</b>: crie um monstro em branco ou parta de qualquer entrada do compêndio de monstros, já com estatísticas sugeridas pelo nível e pela função dele. Veja o capítulo 10.</p>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">05</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 03 A FICHA -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 03</span><b>A ficha do personagem</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 03</div>
+      <h1 class="titulo-secao">A ficha do personagem</h1>
+      <div class="lead">Tudo organizado em abas, como numa ficha de papel — só que ela calcula sozinha.</div>
+
+      <div class="grade c3">
+        <div class="fcard"><div class="ic">🧙</div><div class="tit">Ficha</div><p>Atributos, defesas, PV, pulsos de cura, velocidade, iniciativa, perícias e idiomas.</p></div>
+        <div class="fcard"><div class="ic">🎖</div><div class="tit">Talentos</div><p>Busca do compêndio, com texto completo ao clicar em cada um.</p></div>
+        <div class="fcard"><div class="ic">✨</div><div class="tit">Poderes</div><p>À vontade, de encontro e diários, com os seus números já calculados.</p></div>
+        <div class="fcard"><div class="ic">🎒</div><div class="tit">Inventário</div><p>Comprar, encantar, equipar e encaixar augments. Capítulos 5 e 6.</p></div>
+        <div class="fcard"><div class="ic">📝</div><div class="tit">Anotações</div><p>Janelas flutuantes, quantas você quiser. Capítulo 9.</p></div>
+        <div class="fcard"><div class="ic">🕰</div><div class="tit">Histórico</div><p>Linha do tempo de tudo que mudou na ficha.</p></div>
+      </div>
+
+      <h2 class="sub">O retrato e o nome</h2>
+      <p>Clique no retrato circular para trocar a imagem do personagem. O nome fica em destaque no topo, editável a qualquer momento.</p>
+
+      <h2 class="sub">Campos que crescem sozinhos</h2>
+      <p>Textos longos (traços, aparência, companheiros, idiomas, perícias de criaturas) não cortam o que você escreve: o campo cresce até um limite confortável e depois ganha uma barra de rolagem, sem nunca esconder conteúdo.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Tudo o que você digita é salvo sozinho, poucos milissegundos depois de parar de digitar. Veja o capítulo 16 para entender exatamente como.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">06</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 04 CÁLCULO AUTOMÁTICO -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 04</span><b>Atributos, defesas e cálculo automático</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 04</div>
+      <h1 class="titulo-secao">Atributos, defesas e<br>cálculo automático</h1>
+      <div class="lead">Você escolhe; o Grimório soma.</div>
+
+      <p>Assim que você define raça, classe, atributos base e equipamentos, o Grimório recalcula sozinho, em tempo real:</p>
+      <div class="grade">
+        <div class="fcard"><div class="ic">💪</div><div class="tit">Atributos finais</div><p>Base + bônus racial + aumentos automáticos por nível (4, 8, 14, 18, 24 e 28).</p></div>
+        <div class="fcard"><div class="ic">🛡</div><div class="tit">Classe de Armadura e defesas</div><p>Fortitude, Reflexos e Vontade, com a origem de cada bônus visível ao passar o mouse.</p></div>
+        <div class="fcard"><div class="ic">❤</div><div class="tit">Pontos de vida e pulsos de cura</div><p>Máximo e valor do pulso, pela sua classe e Constituição.</p></div>
+        <div class="fcard"><div class="ic">🎯</div><div class="tit">Perícias</div><p>Treinadas, bônus racial e de item somados automaticamente.</p></div>
+      </div>
+
+      <h2 class="sub">Bônus com tipo não se somam em dobro</h2>
+      <p>A regra clássica de 4ª edição — dois bônus do <i>mesmo tipo</i> não se acumulam, só vale o maior — é aplicada sozinha em todo o cálculo: atributos, defesas, ataque e dano. Penalidades e bônus sem tipo continuam somando normalmente.</p>
+
+      <h2 class="sub">Ajustes manuais</h2>
+      <p>Se alguma escolha especial do seu personagem não for reconhecida automaticamente, um pequeno campo de <b>ajuste</b> aparece ao lado do valor calculado — você digita a diferença e ela entra na conta, sem perder o cálculo automático do resto.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Passe o mouse (ou toque) sobre qualquer número calculado para ver a lista completa do que foi somado: atributo, metade do nível, item, talento, raça — linha por linha.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">07</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 05 INVENTÁRIO -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 05</span><b>Inventário: comprar e equipar</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 05</div>
+      <h1 class="titulo-secao">Inventário: comprar e equipar</h1>
+      <div class="lead">Arraste a bolsa de ouro para a mesa e monte o seu equipamento.</div>
+
+      <ol class="passos">
+        <li><span class="selo">1</span><div><b>Escolha a categoria</b> — armadura, escudo, arma, implemento ou item mágico — e busque pelo nome ou filtre por nível.</div></li>
+        <li><span class="selo">2</span><div><b>Escolha a variante</b> (+1, +2, +3…): o preço e o nível mínimo mudam junto, e o programa avisa se o item está acima do seu nível.</div></li>
+        <li><span class="selo">3</span><div><b>Confirme a compra</b>: o ouro é descontado sozinho (opcional desmarcar).</div></li>
+        <li><span class="selo">4</span><div>Marque <b>☑ equipado</b> na lista do inventário — só então o item entra nas contas de ataque, dano e defesa.</div></li>
+      </ol>
+
+      <h2 class="sub">Encantar um item que você já tem</h2>
+      <p>Clique em <b>✨ Encantar</b> ao lado de uma arma, armadura ou implemento comum para transformá-lo num item mágico: o programa só mostra encantamentos compatíveis com aquele tipo de equipamento e com o seu nível.</p>
+
+      <h2 class="sub">Uma arma, um escudo</h2>
+      <p>O programa só deixa uma armadura e um escudo equipados ao mesmo tempo — equipar um novo desequipa o anterior automaticamente, sem risco de somar os dois por engano.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Itens livres (sem ligação ao compêndio, como objetos de história pessoal) também entram pelo botão <b>+ Item livre</b>, só com nome e quantidade.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">08</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 06 AUGMENTS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 06</span><b>Augments 💎</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 06</div>
+      <h1 class="titulo-secao">Augments: joias de poder 💎</h1>
+      <div class="lead">A pedra certa, encaixada na arma certa, muda tudo.</div>
+
+      <p>Augments são itens pequenos (fragmentos, joias, gemas) que se encaixam dentro de uma arma ou implemento já existente, em vez de substituí-lo. O botão <b>💎 Augment</b> aparece em qualquer arma ou implemento do seu inventário.</p>
+
+      <ol class="passos">
+        <li><span class="selo">1</span><div>Clique em <b>💎 Augment</b> na arma que vai receber a joia.</div></li>
+        <li><span class="selo">2</span><div>Escolha a joia pelo buscador (filtrado para mostrar só augments) e o nível/preço dela.</div></li>
+        <li><span class="selo">3</span><div>Pronto: o bônus do augment passa a valer <b>só para aquela arma</b>, automaticamente, em todos os poderes que a usarem.</div></li>
+      </ol>
+
+      <p>Para trocar de joia, use <b>Tirar augment</b> e encaixe outra. O efeito é somado no cálculo do capítulo 7 e já aparece pronto na macro do Roll20 (capítulo 13) — inclusive no dano de crítico.</p>
+
+      <div class="caixa-exemplo"><div class="rot">Exemplo real</div>Uma arma com um augment de frio encaixado passa a dar <span class="n">+1 de dano gélido</span> sempre que o poder usado com ela tiver a palavra-chave <b>Frio</b> — sem você precisar lembrar de somar nada na hora de rolar.</div>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Augments valem por nível: uma mesma joia rende mais dano (ou outro efeito maior) conforme sobe de versão — o programa já aplica o valor certo pelo nível escolhido.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">09</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 07 SEUS NÚMEROS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 07</span><b>Seus números com cada arma</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 07</div>
+      <h1 class="titulo-secao">Seus números com cada arma</h1>
+      <div class="lead">Abra qualquer poder e veja exatamente o que vai rolar na mesa.</div>
+
+      <p>Ao abrir qualquer poder de ataque, um bloco <b>"Seus números com &lt;arma&gt;"</b> mostra, linha por linha, de onde vem cada parte do seu acerto e do seu dano: atributo, metade do nível, proficiência, aprimoramento mágico, talentos e itens.</p>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">🎯</div><div class="tit">Total de acerto</div><p>O número final que você soma à rolagem de d20.</p></div>
+        <div class="fcard"><div class="ic">🎲</div><div class="tit">Expressão de dano</div><p>Pronta, com dado da arma, aprimoramento e bônus fixos já somados (ex.: 1d12+7).</p></div>
+        <div class="fcard"><div class="ic">📋</div><div class="tit">Detalhe de cada linha</div><p>Cada bônus com seu nome e origem, para conferir ou explicar na mesa.</p></div>
+        <div class="fcard"><div class="ic">❓</div><div class="tit">Efeitos condicionais</div><p>Bônus que só valem em certa situação, listados à parte (capítulo 14).</p></div>
+      </div>
+
+      <p>Se o personagem tem mais de uma arma ou implemento equipado, cada um ganha o seu próprio bloco — útil para quem luta com duas armas ou alterna entre arma e implemento.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Esse é o mesmo cálculo, exatamente igual, que vai para a macro do Roll20 no capítulo 12: o número que você vê na tela é o número que vai rolar lá.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">10</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 08 GRIMÓRIO DE PODERES -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 08</span><b>O Grimório de poderes</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 08</div>
+      <h1 class="titulo-secao">O Grimório de poderes</h1>
+      <div class="lead">Todos os seus poderes, numa janela grande, em cartas de baralho.</div>
+
+      <p>O botão <b>📖 Grimório</b> abre todos os poderes do personagem em cartas organizadas por tipo — à vontade, de encontro, diário e de itens — com filtros por nível, classe de ação e palavra-chave.</p>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">🌐</div><div class="tit">Português / English</div><p>Cada carta mostra o nome original e a tradução; um clique troca o idioma do texto inteiro.</p></div>
+        <div class="fcard"><div class="ic">🔍</div><div class="tit">Zoom</div><p>Botões A−/100%/A+ ou Ctrl+roda do mouse, de 50% a 250%.</p></div>
+        <div class="fcard"><div class="ic">↗</div><div class="tit">Janela separada</div><p>Abre o Grimório numa página própria — ótimo para deixar aberto num segundo monitor.</p></div>
+        <div class="fcard"><div class="ic">📜</div><div class="tit">Rolagem suave</div><p>A lista de cartas rola independente dos filtros, que ficam sempre visíveis no topo.</p></div>
+      </div>
+
+      <p>A barra de busca no topo da tela (🔍 Pesquisar no compêndio) funciona em português e em inglês ao mesmo tempo, para qualquer poder, talento, item, raça ou classe — mesmo que você só lembre parte do nome.</p>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">11</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 09 ANOTAÇÕES -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 09</span><b>Anotações flutuantes</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 09</div>
+      <h1 class="titulo-secao">Anotações flutuantes</h1>
+      <div class="lead">Quantas janelas você precisar, do jeito que você quiser organizar.</div>
+
+      <p>Abra quantas janelas de anotação quiser: diário de aventura, segredos do personagem, plano da próxima sessão, mapa de contatos. Cada janela é independente e pode ser:</p>
+      <div class="grade">
+        <div class="fcard"><div class="ic">↔</div><div class="tit">Arrastada e redimensionada</div><p>Posicione do jeito que preferir na tela.</p></div>
+        <div class="fcard"><div class="ic">➖</div><div class="tit">Minimizada</div><p>Tire do caminho sem perder o conteúdo.</p></div>
+        <div class="fcard"><div class="ic">✏</div><div class="tit">Renomeada</div><p>Dê um título próprio a cada janela.</p></div>
+        <div class="fcard"><div class="ic">🕰</div><div class="tit">Versões anteriores</div><p>Guarda uma cópia a cada poucos minutos de edição.</p></div>
+      </div>
+      <p>A aba <b>Histórico</b> mostra uma linha do tempo com todas as edições e versões salvas, para você voltar a qualquer ponto anterior de um texto.</p>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">12</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 10 CRIATURAS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 10</span><b>Criaturas do mestre</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 10</div>
+      <h1 class="titulo-secao">Criaturas do mestre</h1>
+      <div class="lead">Monstros e chefes, prontos para a mesa em poucos cliques.</div>
+
+      <p>O botão <b>🐉 Nova criatura</b> cria um monstro em branco ou parte de uma entrada do compêndio de monstros, já trazendo estatísticas sugeridas pelo nível e pela função (guerrilheiro, bruto, soldado, espreitador, controlador ou artilheiro).</p>
+
+      <div class="grade c3">
+        <div class="fcard"><div class="ic">📊</div><div class="tit">Estatísticas</div><p>CA, defesas, PV, iniciativa — cada campo mostra o valor sugerido ao lado.</p></div>
+        <div class="fcard"><div class="ic">⚔</div><div class="tit">Poderes</div><p>✨ Sugerir ataque e dano calcula os números pelo nível da criatura.</p></div>
+        <div class="fcard"><div class="ic">📜</div><div class="tit">Bloco de estatísticas</div><p>O resumo pronto para imprimir ou salvar em PDF.</p></div>
+      </div>
+
+      <p>Ferramentas úteis para o mestre: <b>🎚 Ajustar todos ao nível</b> recalcula tudo se você mudar o nível da criatura; <b>copiar poderes de outro monstro</b> e <b>duplicar</b> agilizam variações do mesmo inimigo.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Criaturas também ganham macro para o Roll20 (botão R20 em cada poder) e exportam a ficha completa, exatamente como um personagem — veja os capítulos 12 a 15.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">13</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 11 EXPORTAÇÕES -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 11</span><b>Exportando a ficha</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 11</div>
+      <h1 class="titulo-secao">Exportando a ficha</h1>
+      <div class="lead">Sua ficha sai do Grimório do jeito que você precisar.</div>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">📄</div><div class="tit">PDF editável</div><p>Um PDF de verdade, com campos de formulário: nome, atributos, perícias, PV atual, itens e até uma caixa por janela de anotação. Pode ser preenchido em qualquer leitor de PDF e reimportado depois — o Grimório recalcula tudo sozinho.</p></div>
+        <div class="fcard"><div class="ic">💾</div><div class="tit">.json</div><p>A ficha inteira num único arquivo. Ideal para levar o personagem para outro computador ou mandar para um amigo abrir no Grimório dele.</p></div>
+        <div class="fcard"><div class="ic">📋</div><div class="tit">.dnd4e</div><p>Formato de personagem compatível com o Character Builder, para quem ainda usa aquele programa em paralelo.</p></div>
+        <div class="fcard"><div class="ic">🎲</div><div class="tit">Roll20</div><p>O verdadeiro auge do Grimório — veja os próximos capítulos.</p></div>
+      </div>
+
+      <p>Todos os botões de exportação ficam no topo da ficha, sempre visíveis: <span class="botao-mini">⬇ PDF editável</span> <span class="botao-mini sec">.json</span> <span class="botao-mini sec">.dnd4e</span>.</p>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">14</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 12 O AUGE PARTE 1 -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 12 · ★</span><b>O auge: macros para o Roll20</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 12 — O coração do Grimório</div>
+      <h1 class="titulo-secao">★ Macros prontas<br>para o Roll20</h1>
+      <div class="lead">Chega de montar macro à mão: cada poder, talento e item já sai pronto para colar.</div>
+
+      <p>Em qualquer carta de poder, talento ou item mágico — no Grimório, no leitor de um item ou na lista de talentos — existe um pequeno botão <span class="tag-roll">R20</span>. Ele gera, na hora, a macro completa no formato que o Roll20 usa de verdade (o modelo <code>dnd4epower</code>), já com:</p>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">🎯</div><div class="tit">Ataque certo</div><p>1d20 + atributo + metade do nível + bônus de arma/implemento, exatamente como na ficha.</p></div>
+        <div class="fcard"><div class="ic">🎲</div><div class="tit">Dano e crítico</div><p>Dados da arma, aprimoramento mágico e crítico com o dano máximo automático.</p></div>
+        <div class="fcard"><div class="ic">🏷</div><div class="tit">Tudo formatado</div><p>Tipo, palavras-chave, alcance, alvo, acerto, erro e efeito — tudo no lugar certo da macro.</p></div>
+        <div class="fcard"><div class="ic">📋</div><div class="tit">Um clique para copiar</div><p>O botão já copia o texto pronto para a área de transferência — é só colar no Roll20.</p></div>
+      </div>
+
+      <h2 class="sub">Como usar</h2>
+      <ol class="passos">
+        <li><span class="selo">1</span><div>Abra o poder, talento ou item que quer rolar no Roll20.</div></li>
+        <li><span class="selo">2</span><div>Clique no botão <span class="tag-roll">R20</span>.</div></li>
+        <li><span class="selo">3</span><div>A macro é copiada sozinha — cole (<span class="tecla">Ctrl+V</span>) numa nova macro do Roll20 ou direto no chat.</div></li>
+      </ol>
+
+      <div class="caixa-exemplo"><div class="rot">Trecho de uma macro gerada</div>&amp;{template:dnd4epower} {{encounter=1}} {{name=Weight of Earth}}
+{{attack=[[ 1d20 + <span class="n">15</span> ]] vs **AC**}}
+{{damage=[[ 1d12 + <span class="n">7</span> ]] de dano}}</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">15</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 13 O AUGE PARTE 2 -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 13 · ★</span><b>Magia, item e joia na macro</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 13 — O coração do Grimório</div>
+      <h1 class="titulo-secao">★ Poder, talento, item<br>e augment — tudo tem macro</h1>
+      <div class="lead">O botão R20 não é só para poderes de ataque.</div>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">✨</div><div class="tit">Poderes</div><p>Qualquer poder à vontade, de encontro, diário ou utilitário, de qualquer classe.</p></div>
+        <div class="fcard"><div class="ic">🎖</div><div class="tit">Talentos</div><p>Benefício, pré-requisito e texto especial, formatados como referência de mesa.</p></div>
+        <div class="fcard"><div class="ic">🗡</div><div class="tit">Itens mágicos</div><p>Uma macro de propriedades passivas (o que o item dá o tempo todo) e uma macro própria para cada poder do item.</p></div>
+        <div class="fcard"><div class="ic">💎</div><div class="tit">Augments</div><p>O poder especial de uma joia encaixada (como um efeito de uma vez por encontro) vira uma habilidade própria na ficha do Roll20.</p></div>
+      </div>
+
+      <h2 class="sub">Bônus passivos de item, resumidos</h2>
+      <p>Itens mágicos com propriedade passiva (um bônus que vale o tempo todo, como "+2 de dano contra mortos-vivos") geram uma macro de referência listando exatamente o que está sendo somado automaticamente na ficha e o que é situacional — para não esquecer nenhum bônus na hora H.</p>
+
+      <h2 class="sub">Itens comuns ficam de fora, de propósito</h2>
+      <p>Armaduras e armas sem nenhuma propriedade mágica não ganham botão R20 — não há nada de especial para gerar. Isso mantém a lista de macros limpa, só com o que realmente importa na mesa.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Vários itens ou poderes com mais de uma macro possível abrem um pequeno menu para você escolher qual quer copiar.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">16</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 14 O AUGE PARTE 3 — CONDICIONAIS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 14 · ★</span><b>Perguntas inteligentes na rolagem</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 14 — O coração do Grimório</div>
+      <h1 class="titulo-secao">★ Perguntas inteligentes<br>dentro da própria rolagem</h1>
+      <div class="lead">"O alvo está derrubado?" — e o Roll20 já soma o bônus certo, na hora.</div>
+
+      <p>Muitos talentos e itens só dão bônus <i>em certas situações</i> — "contra um alvo marcado", "se você estiver usando a arma com as duas mãos", "no primeiro ataque do turno". O Grimório reconhece essas condições e as transforma em <b>perguntas dentro da própria macro</b>: ao rolar, o Roll20 abre uma caixinha de Sim/Não, e o valor certo entra na soma sozinho.</p>
+
+      <div class="caixa-exemplo"><div class="rot">Exemplo real, direto da macro</div>{{damage=[[ 1d12 + 7
+  <span class="q">+ ?{Alvo derrubado? - Headsman's Chop|Não,0|Sim,5}</span>
+  <span class="q">+ ?{Usando a arma com as duas mãos?|Não,0|Sim,1}</span>
+]] de dano.}}</div>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">✅</div><div class="tit">Bônus certo, sempre</div><p>Nada de lembrar de cabeça: a pergunta aparece no momento da rolagem.</p></div>
+        <div class="fcard"><div class="ic">🎲</div><div class="tit">Também em dados</div><p>Algumas perguntas somam um valor fixo; outras somam um dado inteiro (ex.: +1d8).</p></div>
+        <div class="fcard"><div class="ic">💥</div><div class="tit">Vale no crítico também</div><p>Bônus de crítico condicionais entram só na linha de dano crítico, não duas vezes.</p></div>
+        <div class="fcard"><div class="ic">📜</div><div class="tit">O que não dá para perguntar</div><p>Vira uma linha informativa "Condicionais (não calculados)", para você lembrar na mesa.</p></div>
+      </div>
+
+      <h2 class="sub">A habilidade "Efeitos-Adicionais"</h2>
+      <p>Toda ficha exportada para o Roll20 ganha uma habilidade própria chamada <b>Efeitos-Adicionais</b>, que lista, em texto, todos os bônus condicionais do personagem — um resumo de consulta rápida, separado das macros de ataque.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Para não poluir a rolagem, cada poder usa no máximo 5 perguntas — o que passar disso vira texto informativo.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">17</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 15 FICHA INTEIRA NO ROLL20 -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 15</span><b>A ficha inteira dentro do Roll20</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 15</div>
+      <h1 class="titulo-secao">A ficha inteira dentro do Roll20</h1>
+      <div class="lead">Não é só a macro — a ficha oficial do Roll20 se preenche sozinha.</div>
+
+      <h2 class="sub">A extensão de navegador</h2>
+      <p>O Grimório tem uma pequena extensão, com uma pasta própria para cada navegador (Chrome, Brave, Edge, Opera, Opera GX e Firefox). Depois de instalada, um botão <b>📖 Grimório</b> aparece no canto da tela do Roll20.</p>
+
+      <ol class="passos">
+        <li><span class="selo">1</span><div>Na ficha, clique em <b>📋 Copiar p/ Roll20</b> (ou baixe o arquivo <b>.roll20.json</b>).</div></li>
+        <li><span class="selo">2</span><div>No Roll20, abra o botão <b>📖 Grimório</b> da extensão.</div></li>
+        <li><span class="selo">3</span><div>Cole o texto copiado (ou escolha o arquivo baixado) e confirme.</div></li>
+        <li><span class="selo">4</span><div>A personagem é criada — ou atualizada, se já existir — com <b>tudo</b> preenchido sozinho.</div></li>
+      </ol>
+
+      <h2 class="sub">O que entra preenchido</h2>
+      <div class="grade">
+        <div class="fcard"><div class="ic">📊</div><div class="tit">Atributos e defesas</div><p>CA, Fortitude, Reflexos, Vontade, com cada tipo de bônus no campo certo da ficha do Roll20.</p></div>
+        <div class="fcard"><div class="ic">❤</div><div class="tit">PV e pulsos</div><p>Máximo, valor do pulso e número de pulsos por dia.</p></div>
+        <div class="fcard"><div class="ic">⚔</div><div class="tit">Armas e implementos</div><p>Até 6, com proficiência, aprimoramento e bônus já nos campos certos.</p></div>
+        <div class="fcard"><div class="ic">✨</div><div class="tit">Poderes e habilidades</div><p>Todos com a macro pronta ligada ao botão de rolar, até 100 poderes.</p></div>
+      </div>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>O mesmo caminho vale para criaturas do mestre (capítulo 10): a ficha de um monstro vai para o Roll20 do mesmo jeito que a de um jogador.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">18</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 16 SEGURANÇA DOS DADOS -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 16</span><b>Seus dados estão seguros</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 16</div>
+      <h1 class="titulo-secao">Seus dados estão seguros</h1>
+      <div class="lead">Tudo fica só no seu computador — e três camadas protegem contra o engano de um clique.</div>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">💾</div><div class="tit">Salvamento automático</div><p>Cada mudança é gravada sozinha, poucos milissegundos depois. O botão <b>💾 Salvar</b> mostra "Salvo ✓" com o horário.</p></div>
+        <div class="fcard"><div class="ic">🗄</div><div class="tit">Backup rotativo</div><p>Uma cópia de segurança de cada ficha é guardada a cada poucos minutos, mantendo as últimas versões.</p></div>
+        <div class="fcard"><div class="ic">🗑</div><div class="tit">Lixeira</div><p>Apagar uma ficha nunca é definitivo na hora: ela vai para a lixeira, de onde pode ser restaurada.</p></div>
+        <div class="fcard"><div class="ic">📦</div><div class="tit">Backup de tudo</div><p>Um único arquivo com todos os personagens e anotações, para guardar fora do computador.</p></div>
+      </div>
+
+      <p>O cartão <b>🛡 Seus dados</b>, na tela inicial, mostra exatamente qual pasta está sendo usada e reúne os três botões: <span class="botao-mini">Backup de tudo</span>, <span class="botao-mini sec">Restaurar backup</span> e <span class="botao-mini sec">Lixeira</span>.</p>
+
+      <div class="caixa-importante"><div class="rot">⚠ Atenção</div>Se você usa mais de uma cópia do programa (por exemplo, uma pasta própria e uma pasta de um grupo de amigos), confira sempre no cartão <b>🛡 Seus dados</b> qual pasta está aberta antes de editar — cada cópia guarda as suas fichas separadamente.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">19</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 17 ATUALIZAÇÕES -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 17</span><b>Mantendo o Grimório atualizado</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 17</div>
+      <h1 class="titulo-secao">Mantendo o Grimório atualizado</h1>
+      <div class="lead">Um botão discreto, do jeito mais simples possível.</div>
+
+      <p>No canto superior do programa fica um pequeno botão <b>↻</b>. Ele verifica, em silêncio, se existe uma versão mais nova assim que o programa abre.</p>
+
+      <div class="grade">
+        <div class="fcard"><div class="ic">↻</div><div class="tit">Nada de novo</div><p>O botão continua discreto; clique nele a qualquer momento para checar na hora.</p></div>
+        <div class="fcard"><div class="ic">⬇</div><div class="tit">Tem atualização</div><p>O botão muda para "⬇ Baixar atualização", já com o número da nova versão.</p></div>
+      </div>
+
+      <p>Ao clicar em <b>⬇ Baixar atualização</b>, o programa baixa, instala e reabre sozinho — sem precisar reinstalar nada à mão. As suas fichas e o seu compêndio nunca são tocados nesse processo: só o programa em si é trocado.</p>
+
+      <div class="caixa-dica"><div class="rot">💡 Dica</div>Nenhum login é necessário em momento algum — nem para usar o programa, nem para atualizá-lo.</div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">20</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ 18 FAQ -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="miolo">
+    <div class="cabecalho"><span>Capítulo 18</span><b>Dicas rápidas e perguntas frequentes</b></div>
+    <div class="corpo">
+      <div class="numero-secao">Capítulo 18</div>
+      <h1 class="titulo-secao">Dicas rápidas e<br>perguntas frequentes</h1>
+
+      <h3 class="sub3">A macro do Roll20 não deu o mesmo número da ficha. O que fiz de errado?</h3>
+      <p>Confira se o item está marcado como <b>equipado</b> no inventário — só itens equipados entram no cálculo e, portanto, na macro.</p>
+
+      <h3 class="sub3">Importei uma ficha de novo e perdi minhas anotações!</h3>
+      <p>Na hora de importar um arquivo com o mesmo nome de um personagem existente, escolha sempre <b>atualizar</b>, nunca <b>criar outra</b> — veja o capítulo 2. Se já aconteceu, procure na <b>Lixeira</b> (capítulo 16): a versão antiga costuma estar lá.</p>
+
+      <h3 class="sub3">Posso jogar sem internet?</h3>
+      <p>Sim. Depois de instalado, o Grimório funciona totalmente offline — a internet só é usada para checar atualizações (capítulo 17) e, se você usar, para colar a macro no próprio Roll20.</p>
+
+      <h3 class="sub3">Dá para ter mais de um personagem aberto ao mesmo tempo?</h3>
+      <p>Sim — cada ficha abre na mesma janela, mas o Grimório de poderes (capítulo 8) pode ser destacado numa janela própria com <b>↗ Janela separada</b>, útil para consultar poderes enquanto edita outra coisa.</p>
+
+      <h3 class="sub3">O botão R20 não apareceu num item.</h3>
+      <p>É esperado para itens comuns sem nenhuma propriedade mágica — veja o capítulo 13. Só itens, poderes e talentos com algo especial para rolar ganham o botão.</p>
+
+      <div class="caixa-dica" style="margin-top:4mm"><div class="rot">💡 Resumo de atalhos</div>
+      <span class="botao-mini sec">🌐</span> idioma &nbsp;·&nbsp; <span class="botao-mini sec">💾</span> salvar &nbsp;·&nbsp; <span class="botao-mini sec">↻</span> atualizar &nbsp;·&nbsp; <span class="tag-roll">R20</span> gerar macro &nbsp;·&nbsp; <span class="botao-mini sec">💎</span> augment
+      </div>
+    </div>
+    <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">21</span></div>
+  </div>
+</div>
+
+<!-- ============================================================ PÁGINA FINAL -->
+<div class="pagina">
+  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
+  <div class="final">
+    <div class="emblema">⚔</div>
+    <h2>Boa aventura!</h2>
+    <p>O Grimório existe para tirar o peso das contas de cima da mesa e devolver o tempo para a história. Que seus dados nunca falhem, seus críticos sejam frequentes e suas macros rolem sempre certas.</p>
+    <div class="assinatura">by Cramenha<small>Grimório do Aventureiro</small></div>
+  </div>
+</div>
+
+</body>
+</html>
