@@ -3,14 +3,13 @@
 // para elementos do núcleo que só existem no arquivo fechado do CB (ex.: Ranger).
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { COMPENDIO } from './caminhos.mjs';
 import { carregar, acharPorNome, norm } from './compendio.mjs';
 import { linhasPropriedade, interpretar } from './passivas.mjs';
 
-const aqui = path.dirname(fileURLToPath(import.meta.url));
 let REGRAS = null;
 const regras = () => {
-  if (!REGRAS) { try { REGRAS = JSON.parse(fs.readFileSync(path.join(aqui, 'compendio', 'regras.json'), 'utf8')); } catch { REGRAS = { el: {}, nome: {} }; } }
+  if (!REGRAS) { try { REGRAS = JSON.parse(fs.readFileSync(path.join(COMPENDIO, 'regras.json'), 'utf8')); } catch { REGRAS = { el: {}, nome: {} }; } }
   return REGRAS;
 };
 export const recarregarRegras = () => { REGRAS = null; };

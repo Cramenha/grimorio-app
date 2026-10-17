@@ -29,7 +29,7 @@ cp(path.join(aqui, 'extensao-roll20'), path.join(stage, 'extensao-roll20'));
 cp(path.join(aqui, 'baixar-compendio.mjs'), path.join(stage, 'baixar-compendio.mjs')); // o servidor usa para baixar o compêndio
 cp(path.join(aqui, 'manual', 'Grimorio-do-Aventureiro-Manual.pdf'), path.join(stage, 'Grimorio-do-Aventureiro-Manual.pdf')); // manual do usuário, para compartilhar com o pacote
 const pkg = JSON.parse(fs.readFileSync(path.join(stage, 'package.json'), 'utf8')); delete pkg.devDependencies; fs.writeFileSync(path.join(stage, 'package.json'), JSON.stringify(pkg, null, 2));
-for (const m of ['pdf-lib', '@pdf-lib', 'pako', 'tslib']) cp(path.join(aqui, 'node_modules', m), path.join(stage, 'node_modules', m));
+for (const m of ['pdf-lib', '@pdf-lib', 'pako', 'tslib', 'bootstrap', '@fontsource']) cp(path.join(aqui, 'node_modules', m), path.join(stage, 'node_modules', m));
 fs.writeFileSync(path.join(stage, 'LEIA-ME.txt'), [
   'GRIMORIO DO AVENTUREIRO / ADVENTURER\'S GRIMOIRE  v' + versao, '',
   'PT: Dê dois cliques em Grimorio.exe. O navegador abre em http://localhost:3102 e um ícone fica na bandeja (clique direito > Sair).',

@@ -15,18 +15,26 @@ import * as r20 from './roll20.mjs';
 import * as r20f from './roll20-ficha.mjs';
 import * as cri from './criatura.mjs';
 import * as atu from './atualizar.mjs';
+import { DADOS } from './caminhos.mjs';
 
 const PASTA = path.dirname(fileURLToPath(import.meta.url));
-const DADOS = path.join(PASTA, 'dados');
 const PERS = path.join(DADOS, 'personagens');
 const LIXEIRA = path.join(DADOS, 'lixeira');
-const PORTA = 3102;
+const PORTA = Number(process.env.GRIMORIO_PORTA) || 3102;
 const VERSAO = JSON.parse(fs.readFileSync(path.join(PASTA, 'package.json'), 'utf8')).version;
 fs.mkdirSync(PERS, { recursive: true });
 fs.mkdirSync(LIXEIRA, { recursive: true });
 
-const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml' };
+const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff' };
 const ESTATICOS = new Set(['index.html', 'app.js', 'criatura.js', 'style.css']);
+// Bootstrap e fontes servidos de node_modules (sem CDN: o app funciona offline). /vendor/<pacote>/<arquivo>
+const VENDOR = ['bootstrap/dist/', '@fontsource/cinzel/', '@fontsource/crimson-pro/'];
+
+// No app desktop (Electron) quem verifica e instala atualizações é o electron-updater (electron/main.cjs).
+const atualizador = globalThis.grimorioAtualizador || {
+  verificar: (forcar) => atu.verificar(VERSAO, forcar),
+  instalar: async () => { const v = await atu.instalar(PASTA, VERSAO); setTimeout(() => process.exit(0), 600); return v; },
+};
 
 const ok = (res, obj, code = 200) => { res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(obj)); };
 const erro = (res, msg, code = 400) => ok(res, { erro: msg }, code);
@@ -87,6 +95,14 @@ async function rota(req, res) {
   const q = Object.fromEntries(u.searchParams);
 
   // estáticos
+  if (req.method === 'GET' && p.startsWith('/vendor/')) {
+    const rel = path.posix.normalize(decodeURIComponent(p.slice(8)));
+    if (!VENDOR.some((v) => rel.startsWith(v)) || rel.includes('..')) { res.writeHead(404); return res.end('Não encontrado'); }
+    const arq = path.join(PASTA, 'node_modules', rel);
+    if (!fs.existsSync(arq)) { res.writeHead(404); return res.end('Não encontrado'); }
+    res.writeHead(200, { 'Content-Type': TIPOS[path.extname(arq)] || 'application/octet-stream', 'Cache-Control': 'max-age=86400' });
+    return res.end(fs.readFileSync(arq));
+  }
   if (req.method === 'GET' && !p.startsWith('/api/')) {
     const nome = p === '/' ? 'index.html' : p.slice(1);
     if (!ESTATICOS.has(nome)) { res.writeHead(404); return res.end('Não encontrado'); }
@@ -116,7 +132,7 @@ async function rota(req, res) {
   }
 
   // segurança dos dados: onde ficam, backup total, restauração e lixeira
-  if (p === '/api/dados-info' && req.method === 'GET') return ok(res, { pasta: PERS, total: fs.readdirSync(PERS).filter((f) => f.endsWith('.json')).length });
+  if (p === '/api/dados-info' && req.method === 'GET') return ok(res, { pasta: PERS, backups: BACKUPS, total: fs.readdirSync(PERS).filter((f) => f.endsWith('.json')).length });
   if (p === '/api/backup-total' && req.method === 'GET') {
     const fichas = fs.readdirSync(PERS).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(path.join(PERS, f), 'utf8')));
     return ok(res, { formato: 'grimorio-backup', quando: new Date().toISOString(), fichas });
@@ -253,9 +269,9 @@ async function rota(req, res) {
   }
 
   // atualizações pelos Releases do GitHub
-  if (p === '/api/versao') return ok(res, await atu.verificar(VERSAO, q.forcar === '1'));
+  if (p === '/api/versao') return ok(res, await atualizador.verificar(q.forcar === '1'));
   if (p === '/api/atualizar' && req.method === 'POST') {
-    try { const v = await atu.instalar(PASTA, VERSAO); ok(res, { ok: true, versao: v.versao }); setTimeout(() => process.exit(0), 600); }
+    try { const v = await atualizador.instalar(); ok(res, { ok: true, versao: v.versao }); }
     catch (e) { erro(res, e.message, 500); }
     return;
   }
@@ -263,6 +279,12 @@ async function rota(req, res) {
   erro(res, 'Rota não encontrada.', 404);
 }
 
-http.createServer(async (req, res) => {
+const servidor = http.createServer(async (req, res) => {
   try { await rota(req, res); } catch (e) { console.error(e); if (!res.headersSent) erro(res, e.message || 'Erro interno.', 500); else res.end(); }
-}).listen(PORTA, '127.0.0.1', () => console.log(`Grimório do Aventureiro: http://localhost:${PORTA}`));
+});
+// o app desktop espera por isto antes de abrir a janela (e mostra o erro se a porta estiver ocupada)
+export const pronto = new Promise((resolve, reject) => {
+  servidor.once('error', reject);
+  servidor.listen(PORTA, '127.0.0.1', () => { console.log(`Grimório do Aventureiro: http://localhost:${PORTA}`); resolve(PORTA); });
+});
+

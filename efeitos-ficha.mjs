@@ -7,18 +7,17 @@
 //   (ignorado) não se aplica a este poder/arma/nível
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { COMPENDIO } from './caminhos.mjs';
 import * as comp from './compendio.mjs';
 import { efeitosDoTexto, valorNoNivel } from './efeitos-texto.mjs';
 
-const aqui = path.dirname(fileURLToPath(import.meta.url));
 let DB = null, dbM = 0;
 let FORCADO = null;
 // para testes: usa este objeto no lugar de compendioefeitos.json (null volta ao arquivo)
 export function definirBancoDeEfeitos(obj) { FORCADO = obj; }
 function db() {
   if (FORCADO) return FORCADO;
-  const arq = path.join(aqui, 'compendio', 'efeitos.json');
+  const arq = path.join(COMPENDIO, 'efeitos.json');
   try { const m = fs.statSync(arq).mtimeMs; if (!DB || m !== dbM) { DB = JSON.parse(fs.readFileSync(arq, 'utf8')); dbM = m; } } catch { DB = DB || {}; }
   return DB;
 }

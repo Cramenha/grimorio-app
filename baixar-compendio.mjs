@@ -3,10 +3,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
-import { fileURLToPath } from 'node:url';
+import { COMPENDIO } from './caminhos.mjs';
 
-const aqui = path.dirname(fileURLToPath(import.meta.url));
-const destino = path.join(aqui, 'compendio');
+const destino = COMPENDIO;
 const BASE = 'https://iws.mx/dnd/4e_database_files/';
 const TODAS = ['class', 'power', 'race', 'feat', 'item', 'weapon', 'armor', 'implement', 'background', 'theme',
   'paragonpath', 'epicdestiny', 'deity', 'ritual', 'glossary', 'companion', 'disease', 'poison', 'monster', 'trap'];

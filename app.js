@@ -1118,7 +1118,7 @@ async function rodapeDados(el) {
   let info = {};
   try { info = await api('/api/dados-info'); } catch { return; }
   el.insertAdjacentHTML('beforeend', `<div class="folha mt-4"><h3>🛡 Seus dados</h3>
-    <p class="rotulo mb-2">As fichas ficam em <b>${esc(info.pasta)}</b> (${info.total} arquivos). Cada ficha grava sozinha a cada alteração e há cópias de segurança em <b>dados\backups</b>. Se abrir o programa e a ficha não estiver aqui, confira se está usando a mesma pasta do programa.</p>
+    <p class="rotulo mb-2">As fichas ficam em <b>${esc(info.pasta)}</b> (${info.total} arquivos). Cada ficha grava sozinha a cada alteração e há cópias de segurança em <b>${esc(info.backups)}</b>. Se abrir o programa e a ficha não estiver aqui, confira se está usando a mesma pasta do programa.</p>
     <button class="btn-rpg-sec btn-sm" id="bk-total">💾 Backup de tudo (.json)</button>
     <label class="btn-rpg-sec btn-sm m-0">📂 Restaurar backup<input type="file" id="bk-rest" accept=".json" hidden></label>
     <button class="btn-rpg-sec btn-sm" id="bk-lixeira">🗑 Lixeira</button><div id="lixeira-lista" class="mt-2"></div></div>`);

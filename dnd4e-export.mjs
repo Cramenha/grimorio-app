@@ -3,13 +3,12 @@
 // compendio\cb-ids.json (extrair-cb-ids.mjs). O que não tiver id conhecido vai para os avisos e, quando possível, para as notas.
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { COMPENDIO } from './caminhos.mjs';
 import { calcular } from './calculo.mjs';
 import * as comp from './compendio.mjs';
 
-const aqui = path.dirname(fileURLToPath(import.meta.url));
 let IDS = {};
-try { IDS = JSON.parse(fs.readFileSync(path.join(aqui, 'compendio', 'cb-ids.json'), 'utf8')); } catch { /* sem tabela */ }
+try { IDS = JSON.parse(fs.readFileSync(path.join(COMPENDIO, 'cb-ids.json'), 'utf8')); } catch { /* sem tabela */ }
 
 const PERICIAS = ['Acrobatics', 'Arcana', 'Athletics', 'Bluff', 'Diplomacy', 'Dungeoneering', 'Endurance', 'Heal', 'History',
   'Insight', 'Intimidate', 'Nature', 'Perception', 'Religion', 'Stealth', 'Streetwise', 'Thievery'];

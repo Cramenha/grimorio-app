@@ -1,6 +1,8 @@
 // Criaturas, monstros e chefes de D&D 4e: modelo, leitura dos monstros do compêndio (iws.mx), calculadora automática
 // (valores medidos no próprio compêndio), bloco de estatísticas e macros do Roll20 (template dnd4epower).
 import fs from 'node:fs';
+import path from 'node:path';
+import { COMPENDIO } from './caminhos.mjs';
 import * as comp from './compendio.mjs';
 import { novoId } from './importar.mjs';
 import { trechos } from './segmentos.mjs';
@@ -301,7 +303,7 @@ export function lerMonstro(html, meta = {}) {
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 let CAMPOS = {}, camposM = 0;
 function mapaCampos() {
-  try { const arq = new URL('./compendio/pt-campos.json', import.meta.url); const m = fs.statSync(arq).mtimeMs; if (m !== camposM) { CAMPOS = JSON.parse(fs.readFileSync(arq, 'utf8')); camposM = m; } } catch { /* sem o arquivo */ }
+  try { const arq = path.join(COMPENDIO, 'pt-campos.json'); const m = fs.statSync(arq).mtimeMs; if (m !== camposM) { CAMPOS = JSON.parse(fs.readFileSync(arq, 'utf8')); camposM = m; } } catch { /* sem o arquivo */ }
   return CAMPOS;
 }
 export function traduzirCampo(s, nos, dic) {

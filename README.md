@@ -19,5 +19,9 @@ Os dados do usuário ficam em `dados/` (não vai para o Git). / User data lives 
 - O botão **↻** no topo verifica atualizações; quando há uma, vira **Baixar atualização / Download update**. Fichas (`dados/`) nunca são tocadas. / The **↻** button checks for updates; sheets are never touched.
 - **Mantenedor / Maintainer:** `node construir-exe.mjs` gera `dist/Grimorio-Windows-vX.zip` e `dist/Grimorio-atualizacao-vX.zip`; publique um Release com tag `vX.Y.Z` e anexe os dois zips (o zip de atualização precisa ter "atualizacao" no nome). Aumente `version` no `package.json` antes.
 
+## Desktop (Electron, instalador)
+- **Usuário / User:** baixe `Grimorio-Setup-X.Y.Z.exe` em *Releases* e execute. O app abre em janela própria (sem navegador) e as fichas ficam em `%APPDATA%\Grimório do Aventureiro\dados` (menu *Arquivo > Abrir pasta das fichas*). / Run the installer; sheets live in `%APPDATA%\Grimório do Aventureiro\dados`.
+- **Mantenedor / Maintainer:** `npm install`, depois `npm run desktop` (testar) e `npm run desktop:instalador` (gera `dist-desktop\Grimorio-Setup-X.Y.Z.exe` com o compêndio incluído). Para publicar com atualização automática: aumente `version`, defina `GH_TOKEN` e rode `npm run desktop:publicar` (cria o Release com o instalador e o `latest.yml`).
+
 ## Contribuindo / Contributing
 Só o dono publica versões. Qualquer pessoa pode abrir *Issues* e *Pull Requests*; todo PR é revisado antes de entrar. / Only the owner publishes releases. Anyone can open Issues and Pull Requests; every PR is reviewed.

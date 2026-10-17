@@ -2,10 +2,10 @@
 // busca por nome e por texto nos dois idiomas, detalhe com HTML traduzido e ligação por nome.
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { COMPENDIO } from './caminhos.mjs';
 import { aplicar, cobertura } from './segmentos.mjs';
 
-const PASTA = path.join(path.dirname(fileURLToPath(import.meta.url)), 'compendio');
+const PASTA = COMPENDIO;
 const ARQ_PT = path.join(PASTA, 'pt.json');
 const cache = new Map();
 const textoCache = new Map();
