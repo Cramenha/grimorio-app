@@ -45,7 +45,7 @@ globalThis.grimorioAtualizador = {
 
 let janela = null;
 function criarJanela() {
-  janela = new BrowserWindow({ width: 1400, height: 900, minWidth: 900, minHeight: 600, backgroundColor: '#1b1410', autoHideMenuBar: true, title: 'Grimório do Aventureiro', icon: path.join(RAIZ, 'build', 'icon.ico'), show: false });
+  janela = new BrowserWindow({ width: 1400, height: 900, minWidth: 900, minHeight: 600, backgroundColor: '#0b0a13', autoHideMenuBar: true, title: 'Grimório do Aventureiro', icon: path.join(RAIZ, 'build', 'icon.ico'), show: false });
   janela.once('ready-to-show', () => { janela.maximize(); janela.show(); });
   // janelas do próprio app (ficha em janela separada, impressão de criatura) abrem no Electron; links externos vão para o navegador
   janela.webContents.setWindowOpenHandler(({ url }) => {

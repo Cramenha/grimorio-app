@@ -80,10 +80,13 @@ function bonusAdicionais(c, efeitos, nivel, s, stat, power) {
 // Para a ficha do Roll20: a proficiência (0 se a classe/talentos não dão proficiência com a arma) e o que a arma soma além dela e do aprimoramento (campos weapon-N-attack-misc e damage-misc),
 // já com o empilhamento. Usa as mesmas regras do cálculo por poder.
 export function bonusDaArma(P, item, c = calcular(P)) {
-  const w = infoArma('weapon', item.base.id);
+  // itens soltos (cat 'item') cujo ref aponta pra uma arma/implemento de verdade (ex.: "Iron Wand" equipado,
+  // sem base/encantamento separados) também contam como arma/implemento, não só item.cat==='weapon'/'implement'.
+  const baseRef = item.base?.id ? { cat: item.cat === 'implement' ? 'implement' : 'weapon', id: item.base.id } : (item.ref?.id && ['weapon', 'implement'].includes(item.ref.cat) ? item.ref : null);
+  const w = baseRef && infoArma(baseRef.cat, baseRef.id);
   if (!w) return { attackMisc: 0, damageMisc: 0, prof: 0 };
   const mais = +item.ench?.mais || 0;
-  const s = { tipo: 'weapon', nome: nomeDoItem(item), item, w, mais, grupo: w.grupo };
+  const s = { tipo: baseRef.cat, nome: nomeDoItem(item), item, w, mais, grupo: w.grupo };
   const efeitos = efeitosDaFicha(P);
   const misc = (stat) => {
     const linhas = aplicarEmpilhamento([novaLinha(mais, 'enhancement', s.nome, 'enhancement bonus'), ...bonusAdicionais(c, efeitos, c.nivel, s, stat, null)]);

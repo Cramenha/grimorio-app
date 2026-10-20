@@ -10,6 +10,7 @@ import * as imp from './importar.mjs';
 import * as calc from './calculo.mjs';
 import { calculatePowerStats } from './poder-stats.mjs';
 import * as dnd4e from './dnd4e-export.mjs';
+import * as fnd from './foundry-ficha.mjs';
 import * as pdf from './pdf-ficha.mjs';
 import * as r20 from './roll20.mjs';
 import * as r20f from './roll20-ficha.mjs';
@@ -28,7 +29,7 @@ fs.mkdirSync(LIXEIRA, { recursive: true });
 const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff' };
 const ESTATICOS = new Set(['index.html', 'app.js', 'criatura.js', 'style.css']);
 // Bootstrap e fontes servidos de node_modules (sem CDN: o app funciona offline). /vendor/<pacote>/<arquivo>
-const VENDOR = ['bootstrap/dist/', '@fontsource/cinzel/', '@fontsource/crimson-pro/'];
+const VENDOR = ['bootstrap/dist/', '@fontsource/cinzel/', '@fontsource/signika/'];
 
 // No app desktop (Electron) quem verifica e instala atualizações é o electron-updater (electron/main.cjs).
 const atualizador = globalThis.grimorioAtualizador || {
@@ -236,6 +237,11 @@ async function rota(req, res) {
     const ficha = await json(req);
     if (ficha.tipo === 'criatura') return erro(res, 'Criaturas não existem no Character Builder.');
     try { return ok(res, dnd4e.exportarDnd4e(ficha)); } catch (e) { return erro(res, 'Falha ao gerar o .dnd4e: ' + e.message, 500); }
+  }
+
+  if (p === '/api/exportar-foundry' && req.method === 'POST') {
+    const ficha = await json(req);
+    try { return ok(res, fnd.exportarFoundry(ficha, q.lang === 'en' ? 'en' : 'pt')); } catch (e) { return erro(res, 'Falha ao gerar o Foundry .json: ' + e.message, 500); }
   }
 
   // importação: .dnd4e (Character Builder), .json (ficha do app) e PDF editável (campos de formulário)

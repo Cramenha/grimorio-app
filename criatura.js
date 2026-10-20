@@ -136,14 +136,14 @@ function abaEstatCriatura(c) {
       <div class="col-12 col-md-2 d-flex align-items-end"><label><input type="checkbox" data-ck="lider" ${P.lider ? 'checked' : ''}> Líder</label></div>
       ${crCampoTxt('Origem e tipo (ex.: natural humanoid, orc)', 'tipoTexto', 'col-md-5')}
       ${crCampoTxt('Tendência', 'tendencia', 'col-md-3')}${crCampoTxt('Idiomas', 'idiomas', 'col-md-4')}
-      <div class="col-6 col-md-2"><label class="rotulo">XP (automático)</label><div class="form-control" style="background:#fff7;font-weight:700" data-cr="xp"></div></div>
+      <div class="col-6 col-md-2"><label class="rotulo">XP (automático)</label><div class="form-control" style="background:var(--md-surface-container-highest);font-weight:700" data-cr="xp"></div></div>
       <div class="col-6 col-md-2"><label class="rotulo">XP manual</label><input type="number" class="form-control" data-cn="xpManual" value="${esc(P.xpManual ?? '')}" placeholder="vazio = tabela"></div>
     </div>
     <div class="d-flex gap-2 flex-wrap align-items-center mt-3"><button class="btn-rpg" id="cr-auto">🧮 Calcular defesas, PV, iniciativa, testes de resistência e pontos de ação</button>
       <button class="btn-rpg-sec" id="cr-auto-atr" title="Define os seis atributos de acordo com a função e o nível">Sugerir atributos</button>
       <span class="rotulo">Os valores "sugerido" vêm da média dos 5.300 monstros do compêndio; você pode digitar qualquer número.</span></div></div>
     <div class="folha mt-2"><h2>Combate</h2><div class="row g-2">
-      ${crCampoNum('PV', 'pv', 'min="0"', 'pv')}<div class="col-6 col-md-2"><label class="rotulo">Sangrando</label><div class="form-control" style="background:#fff7" data-cr="sangrando"></div></div>
+      ${crCampoNum('PV', 'pv', 'min="0"', 'pv')}<div class="col-6 col-md-2"><label class="rotulo">Sangrando</label><div class="form-control" style="background:var(--md-surface-container-highest)" data-cr="sangrando"></div></div>
       ${crCampoNum('Iniciativa', 'iniciativa', '', 'iniciativa')}${crCampoNum('CA', 'ca', '', 'ca')}${crCampoNum('Fortitude', 'fort', '', 'fort')}${crCampoNum('Reflexos', 'ref', '', 'ref')}${crCampoNum('Vontade', 'vont', '', 'vont')}
       ${crCampoTxt('Deslocamento (ex.: 6, fly 8 (hover), climb 4)', 'velocidade', 'col-md-4')}${crCampoTxt('Sentidos', 'sentidos', 'col-md-4')}
       ${crCampoTxt('Pontos de ação', 'pontosAcao', 'col-md-2', false, 'pontosAcao')}${crCampoTxt('Testes de resistência', 'testesSalvamento', 'col-md-2', false, 'testesResist')}

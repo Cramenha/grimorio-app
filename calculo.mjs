@@ -263,9 +263,18 @@ export function calcular(P) {
       const ar = infoArmadura(it.base.id);
       if (!ar) continue;
       if (ar.escudo) escudo = { ...ar, it }; else corpo = { ...ar, it };
-    } else if ((it.cat === 'weapon') && it.base?.id) {
-      const w = infoArma('weapon', it.base.id);
-      if (w) { ataques.push({ it, w }); (w.grupo.split(/[,/]| or /).map((x) => x.trim()).filter(Boolean)).forEach((g) => vestindo.add('weapon:' + g)); }
+    } else {
+      // arma/implemento de verdade: cat 'weapon'/'implement' com base, OU item solto (cat 'item') cujo ref
+      // aponta direto pra um — ex. "Iron Wand" equipado sem base/encantamento separados (achado auditando o
+      // Bard|Warlord: sem isto, o implemento não tinha proficiência/bônus nenhum calculado em lugar nenhum).
+      const baseRef = (it.cat === 'weapon' || it.cat === 'implement') ? (it.base?.id && { cat: it.cat, id: it.base.id }) : (it.cat === 'item' && it.ref?.id && ['weapon', 'implement'].includes(it.ref.cat) ? it.ref : null);
+      if (baseRef) {
+        const w = infoArma(baseRef.cat, baseRef.id);
+        if (w) {
+          ataques.push({ it, w, implemento: baseRef.cat === 'implement' });
+          if (baseRef.cat === 'weapon') (w.grupo.split(/[,/]| or /).map((x) => x.trim()).filter(Boolean)).forEach((g) => vestindo.add('weapon:' + g));
+        }
+      }
     }
     // encantamento (ou item mágico avulso) → elemento do CB
     const ench = it.ench || (it.cat === 'item' ? { nome: it.nome, mais: it.variante?.mais, nivel: nvVar } : null);
@@ -364,7 +373,7 @@ export function calcular(P) {
     for (const { v } of tipados.values()) total += v;
     if (detalhe) {
       for (const l of linhas) if (l.aplicado === null) l.aplicado = tipados.get(l.tp)?.q === l.q;
-      detalhe.push(...linhas.map((l) => ({ fonte: l.q.fonte, valor: l.v, tipo: l.tp, aplicado: l.aplicado })));
+      detalhe.push(...linhas.map((l) => ({ fonte: l.q.fonte, valor: l.v, tipo: l.tp, aplicado: l.aplicado, expr: l.q.expr })));
     }
     return total;
   }
@@ -391,11 +400,18 @@ export function calcular(P) {
   }
   // ataques das armas equipadas
   const atq = [];
-  for (const { it, w } of ataques) {
-    const mais = it.ench?.mais || 0;
+  for (const { it, w, implemento } of ataques) {
+    const mais = it.ench?.mais || it.variante?.mais || 0;
+    const bonusAtq = Math.floor(nivel / 2) + w.prof + mais + total('attack rolls');
+    if (implemento) {
+      // implemento não tem "corpo a corpo = Força / à distância = Destreza": o atributo certo depende da
+      // classe/poder (Int, Sab ou Car), que a arma não sabe — mostra só o que é dela (proficiência + aprimoramento
+      // + bônus gerais), sem meio-nível nem modificador de atributo embutidos (quem soma isso é o poder, não o item).
+      atq.push({ nome: it.nome, dano: w.dano, grupo: w.grupo, distancia: w.distancia, mais, ataque: w.prof + mais + total('attack rolls'), danoBonus: mais + total('damage rolls'), atributo: 'implemento', implemento: true, prof: w.prof, extraAtq: total('attack rolls'), extraDano: total('damage rolls'), alternativo: null });
+      continue;
+    }
     const ab = w.distancia ? 'des' : 'for';
     const alt = w.distancia ? null : ('des');
-    const bonusAtq = Math.floor(nivel / 2) + w.prof + mais + total('attack rolls');
     atq.push({ nome: it.nome, dano: w.dano, grupo: w.grupo, distancia: w.distancia, mais, ataque: bonusAtq + mods[ab], danoBonus: mods[ab] + mais + total('damage rolls'), atributo: ab, prof: w.prof, extraAtq: total('attack rolls'), extraDano: total('damage rolls'), alternativo: alt && { atributo: alt, ataque: bonusAtq + mods[alt] } });
   }
   const gastos = (P.itens || []).reduce((a, i) => a + (+i.custo || 0), 0);
@@ -415,7 +431,14 @@ export function calcular(P) {
     nivel, atributos: final, modificadores: mods, detalheAtributos: detAtr,
     ac, fort, ref, vont, pv, surtos, valorSurto, velocidade, iniciativa, penalidadeArmadura: penal, pericias,
     ataques: atq, avisos, gastos, passivas,
-    origem: { ac: explica('ac'), fort: explica('fortitude defense'), ref: explica('reflex defense'), vont: explica('will defense'), pv: explica('hit points'), velocidade: explica('speed'), iniciativa: explica('initiative') },
+    origem: {
+      ac: explica('ac'), fort: explica('fortitude defense'), ref: explica('reflex defense'), vont: explica('will defense'), pv: explica('hit points'), velocidade: explica('speed'), iniciativa: explica('initiative'),
+      // PV/1º nível, PV/nível e pulsos de cura são somados por fora de 'hit points' (a fórmula de 'Regras base' é
+      // quem referencia esses 3 nomes internos); expostos separados para quem precisar saber de qual classe/talento vieram.
+      pv1: explica('_LEVEL-ONE-HPS'), pvn: explica('_PER-LEVEL-HPS'), surtos: explica('Healing Surges'),
+      ataque: explica('attack rolls'), dano: explica('damage rolls'),
+      pericias: Object.fromEntries(PERICIAS.map(([nome]) => [nome, explica(norma(nome) + ' misc')])),
+    },
     tags: tags.size,
   };
   Object.defineProperty(resultado, 'detalheStat', { value: detalheStat, enumerable: false });

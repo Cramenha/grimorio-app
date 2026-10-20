@@ -8,19 +8,16 @@
   <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="vendor/@fontsource/cinzel/400.css" rel="stylesheet">
   <link href="vendor/@fontsource/cinzel/700.css" rel="stylesheet">
-  <link href="vendor/@fontsource/crimson-pro/400.css" rel="stylesheet">
-  <link href="vendor/@fontsource/crimson-pro/600.css" rel="stylesheet">
-  <link href="vendor/@fontsource/crimson-pro/400-italic.css" rel="stylesheet">
+  <link href="vendor/@fontsource/signika/400.css" rel="stylesheet">
+  <link href="vendor/@fontsource/signika/500.css" rel="stylesheet">
+  <link href="vendor/@fontsource/signika/600.css" rel="stylesheet">
+  <link href="vendor/@fontsource/signika/700.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
 </head>
 <body data-bs-theme="dark">
-  <!-- filtro que deixa as molduras com traço de tinta levemente irregular -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  </svg>
-
   <nav id="topo">
     <div class="container-xl d-flex align-items-center gap-3 py-2 flex-wrap">
-      <div class="marca" id="marca" title="Voltar aos personagens">⚔ Grimório do Aventureiro<small>FICHAS · ANOTAÇÕES · COMPÊNDIO 4E</small></div>
+      <div class="marca" id="marca" title="Voltar aos personagens">🎲 Grimório do Aventureiro<small>FICHAS · ANOTAÇÕES · COMPÊNDIO 4E</small></div>
       <div class="position-relative flex-grow-1" style="max-width:480px">
         <input id="busca-global" class="form-control form-control-sm" placeholder="Pesquisar no compêndio (poder, talento, item, raça…)" autocomplete="off">
         <div id="res-global" class="invisivel"></div>
@@ -40,7 +37,7 @@
   <!-- Seletor do compêndio -->
   <div class="modal fade" id="modalPicker" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="light">
+      <div class="modal-content folha" data-bs-theme="dark">
         <div class="d-flex align-items-center gap-2 mb-2"><h3 id="pk-titulo" class="mb-0 flex-grow-1"></h3><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="pk-filtros" class="row g-2 mb-2"></div>
         <div class="row g-3">
@@ -54,7 +51,7 @@
   <!-- Leitor do compêndio -->
   <div class="modal fade" id="modalLeitor" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="light">
+      <div class="modal-content folha" data-bs-theme="dark">
         <div class="text-end mb-2"><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="leitor"></div>
       </div>
@@ -67,7 +64,7 @@
       <div class="modal-content" data-bs-theme="dark">
         <div class="barra">
           <h3>📖 Grimório de Poderes</h3>
-          <span id="gr-nome" class="titulo" style="color:#c9b27a"></span>
+          <span id="gr-nome" class="titulo" style="color:var(--md-on-surface-variant)"></span>
           <div id="gr-filtros" class="d-flex gap-1 flex-wrap"></div>
           <div class="ms-auto d-flex gap-2 align-items-center">
             <div class="gr-zoom" title="Zoom dos cartões (Ctrl + roda do mouse também funciona)"><button class="btn-rpg-mini" id="gr-zm" title="Diminuir">A−</button><button class="btn-rpg-mini" id="gr-z0" title="Voltar a 100%"><span id="gr-zv">100%</span></button><button class="btn-rpg-mini" id="gr-zp" title="Aumentar">A+</button></div>
@@ -85,7 +82,7 @@
   <!-- Configurações -->
   <div class="modal fade" id="modalConfig" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="light">
+      <div class="modal-content folha" data-bs-theme="dark">
         <div class="d-flex align-items-center mb-2"><h3 class="mb-0 flex-grow-1">⚙ Configurações</h3><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="cfg-corpo"></div>
       </div>
