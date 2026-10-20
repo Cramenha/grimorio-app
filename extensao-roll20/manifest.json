@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Grimório do Aventureiro - Roll20",
+  "version": "1.0.0",
+  "description": "Adiciona o botão Grimório ao Roll20 para importar a ficha completa gerada pelo Grimório do Aventureiro (D&D 4e).",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.roll20.net/editor/*"
+      ],
+      "js": [
+        "grimorio-roll20.js"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    }
+  ],
+  "minimum_chrome_version": "111"
+}
