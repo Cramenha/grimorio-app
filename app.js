@@ -1126,15 +1126,15 @@ $('#btn-config').onclick = async () => {
 // ============================================================ início
 addEventListener('beforeunload', () => { if (P && !GRIM_ID) navigator.sendBeacon?.('/api/personagens/' + P.id, new Blob([JSON.stringify(P)], { type: 'application/json' })); });
 // atualizações (Releases do GitHub): botão discreto "↻"; se houver versão nova vira "Baixar atualização"
-const TXT_ATU = { pt: { verificar: 'Verificar atualizações', atual: 'Você já está na versão mais recente', baixar: 'Baixar atualização', baixando: 'Baixando e instalando… o Grimório vai reiniciar', erro: 'Não foi possível verificar agora', indisp: 'Atualizações indisponíveis (repositório ainda não é público)', nova: 'Versão' },
-  en: { verificar: 'Check for updates', atual: 'You are on the latest version', baixar: 'Download update', baixando: 'Downloading and installing… Grimoire will restart', erro: 'Could not check right now', indisp: 'Updates unavailable (repository is not public yet)', nova: 'Version' } };
+const TXT_ATU = { pt: { verificar: 'Verificar atualizações', atual: 'Você já está na versão mais recente', baixar: 'Baixar atualização', baixando: 'Baixando e instalando… o Grimório vai reiniciar', erro: 'Não foi possível verificar agora', indisp: 'Atualizações indisponíveis (repositório ainda não é público)', dev: 'Atualizações só no app instalado', nova: 'Versão' },
+  en: { verificar: 'Check for updates', atual: 'You are on the latest version', baixar: 'Download update', baixando: 'Downloading and installing… Grimoire will restart', erro: 'Could not check right now', indisp: 'Updates unavailable (repository is not public yet)', dev: 'Updates only in the installed app', nova: 'Version' } };
 let atuNova = null;
 async function verificarAtualizacao(manual) {
   const b = $('#btn-atualizar'), t = TXT_ATU[IDIOMA];
   try {
     const v = await api('/api/versao' + (manual ? '?forcar=1' : ''));
     if (v.ok && v.nova) { atuNova = v; b.textContent = '⬇ ' + t.baixar + ' v' + v.ultima; b.title = (v.notas || '').slice(0, 300); b.classList.add('btn-rpg'); b.classList.remove('btn-discreto', 'btn-rpg-sec'); }
-    else if (manual) toast(v.ok ? t.atual + ' (v' + v.atual + ')' : (v.motivo === 'sem-release' ? t.indisp : t.erro), !v.ok);
+    else if (manual) toast(v.ok ? t.atual + ' (v' + v.atual + ')' : (v.motivo === 'sem-release' ? t.indisp : v.motivo === 'dev' ? t.dev : t.erro), !v.ok && v.motivo !== 'dev');
   } catch { if (manual) toast(t.erro, true); }
 }
 function ligarAtualizacao() {

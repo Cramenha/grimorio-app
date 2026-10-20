@@ -5,11 +5,17 @@ import { app, BrowserWindow, Menu, dialog, shell } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import updater from 'electron-updater';
-import { maisNova } from '../atualizar.mjs';
 
 const { autoUpdater } = updater;
 const RAIZ = path.join(import.meta.dirname, '..');
-const PORTA = 3103; // diferente do Grimorio.exe (3102), para os dois poderem coexistir
+const PORTA = 3103; // diferente do `npm run web` (3102), para os dois poderem rodar juntos
+
+const partes = (v) => String(v).replace(/^v/i, '').split('.').map((n) => parseInt(n, 10) || 0);
+function maisNova(a, b) { // a > b ?
+  const x = partes(a), y = partes(b);
+  for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0);
+  return false;
+}
 const URL_APP = `http://localhost:${PORTA}`;
 
 if (!app.requestSingleInstanceLock()) app.quit();

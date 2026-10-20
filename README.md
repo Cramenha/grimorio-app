@@ -1,27 +1,23 @@
 # Grimório do Aventureiro / Adventurer's Grimoire
 
-PT: Fichas e anotações de D&D 4e, rodando local (Node + navegador). Este repositório tem **tudo** que o app
+PT: Fichas e anotações de D&D 4e, num app desktop que roda no seu computador. Este repositório tem **tudo** que o app
 precisa pra rodar completo: código, compêndio, regras e tradução para português.
 
-EN: D&D 4e character sheets and notes, running locally (Node + browser). This repository has **everything**
+EN: D&D 4e character sheets and notes, in a desktop app that runs on your computer. This repository has **everything**
 the app needs to run complete: code, compendium, rules and Portuguese translation.
 
 ## Instalar / Install
-1. `git clone` este repo.
-2. Dê dois cliques em `Iniciar Grimorio.bat` (instala o Node 24+ via winget se faltar, roda `npm install` e abre http://localhost:3102). Ou manualmente: Node 24+, `npm install --omit=dev`, `node server.js`.
+- **Usuário / User:** baixe `Grimorio-Setup-X.Y.Z.exe` em *Releases* e execute. O app abre em janela própria e as fichas ficam em `%APPDATA%\Grimório do Aventureiro\dados` (menu *Arquivo > Abrir pasta das fichas*). / Download `Grimorio-Setup-X.Y.Z.exe` from *Releases* and run it. Sheets live in `%APPDATA%\Grimório do Aventureiro\dados`.
+- O botão **↻** no topo verifica atualizações; quando há uma, vira **Baixar atualização / Download update**. Fichas nunca são tocadas. / The **↻** button checks for updates; sheets are never touched.
+- **Vindo da versão antiga (`Grimorio.exe` ou `.bat`)?** Abra a versão antiga, clique em *Backup de tudo (.json)* e, no app novo, em *Restaurar backup*. / **Coming from the old version?** Use *Backup de tudo* there and *Restaurar backup* in the new app.
 
-Double-click `Iniciar Grimorio.bat` (installs Node via winget if missing, runs `npm install`, opens http://localhost:3102). Or manually: Node 24+, `npm install --omit=dev`, `node server.js`.
+## Desenvolver / Develop
+Node 24+ e `npm install`. / Node 24+ and `npm install`.
 
-Os dados do usuário ficam em `dados/` (não vai para o Git). / User data lives in `dados/` (not in Git).
-
-## Windows (.exe)
-- **Usuário / User:** baixe `Grimorio-Windows-vX.zip` em *Releases*, extraia e abra `Grimorio.exe` (Node já vem dentro). Download `Grimorio-Windows-vX.zip` from *Releases*, extract, run `Grimorio.exe` (Node bundled).
-- O botão **↻** no topo verifica atualizações; quando há uma, vira **Baixar atualização / Download update**. Fichas (`dados/`) nunca são tocadas. / The **↻** button checks for updates; sheets are never touched.
-- **Mantenedor / Maintainer:** `node construir-exe.mjs` gera `dist/Grimorio-Windows-vX.zip` e `dist/Grimorio-atualizacao-vX.zip`; publique um Release com tag `vX.Y.Z` e anexe os dois zips (o zip de atualização precisa ter "atualizacao" no nome). Aumente `version` no `package.json` antes.
-
-## Desktop (Electron, instalador)
-- **Usuário / User:** baixe `Grimorio-Setup-X.Y.Z.exe` em *Releases* e execute. O app abre em janela própria (sem navegador) e as fichas ficam em `%APPDATA%\Grimório do Aventureiro\dados` (menu *Arquivo > Abrir pasta das fichas*). / Run the installer; sheets live in `%APPDATA%\Grimório do Aventureiro\dados`.
-- **Mantenedor / Maintainer:** `npm install`, depois `npm run desktop` (testar) e `npm run desktop:instalador` (gera `dist-desktop\Grimorio-Setup-X.Y.Z.exe` com o compêndio incluído). Para publicar com atualização automática: aumente `version`, defina `GH_TOKEN` e rode `npm run desktop:publicar` (cria o Release com o instalador e o `latest.yml`).
+- `npm start`: abre o app desktop (Electron). / opens the desktop app.
+- `npm run web`: o mesmo app servido só pelo `server.js` em http://localhost:3102, para testar no navegador (dados em `dados/`, fora do Git). / the same app served by `server.js` alone, for testing in the browser.
+- `npm run desktop:instalador`: gera `dist-desktop\Grimorio-Setup-X.Y.Z.exe` com o compêndio incluído. / builds the installer.
+- **Publicar / Release:** aumente `version` no `package.json`, defina `GH_TOKEN` e rode `npm run desktop:publicar` (cria o Release com o instalador e o `latest.yml`, que a atualização automática lê).
 
 ## Contribuindo / Contributing
 Só o dono publica versões. Qualquer pessoa pode abrir *Issues* e *Pull Requests*; todo PR é revisado antes de entrar. / Only the owner publishes releases. Anyone can open Issues and Pull Requests; every PR is reviewed.

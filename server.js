@@ -1,4 +1,4 @@
-// Grimório do Aventureiro: servidor local (http://localhost:3102). Cada pessoa roda o seu, com os próprios dados em dados\.
+// Grimório do Aventureiro: servidor local. O app desktop (electron/main.mjs) roda este mesmo servidor na porta 3103; `npm run web` o serve sozinho na 3102.
 // Sem IA e sem login: compêndio, tradução e regras de cálculo vêm em arquivos (compendio\).
 import http from 'node:http';
 import fs from 'node:fs';
@@ -15,7 +15,6 @@ import * as pdf from './pdf-ficha.mjs';
 import * as r20 from './roll20.mjs';
 import * as r20f from './roll20-ficha.mjs';
 import * as cri from './criatura.mjs';
-import * as atu from './atualizar.mjs';
 import { DADOS } from './caminhos.mjs';
 
 const PASTA = path.dirname(fileURLToPath(import.meta.url));
@@ -31,10 +30,10 @@ const ESTATICOS = new Set(['index.html', 'app.js', 'criatura.js', 'style.css']);
 // Bootstrap e fontes servidos de node_modules (sem CDN: o app funciona offline). /vendor/<pacote>/<arquivo>
 const VENDOR = ['bootstrap/dist/', '@fontsource/cinzel/', '@fontsource/signika/'];
 
-// No app desktop (Electron) quem verifica e instala atualizações é o electron-updater (electron/main.cjs).
+// Atualizações só existem no app desktop: o electron/main.mjs injeta o electron-updater. Fora dele (npm run web) não há o que atualizar.
 const atualizador = globalThis.grimorioAtualizador || {
-  verificar: (forcar) => atu.verificar(VERSAO, forcar),
-  instalar: async () => { const v = await atu.instalar(PASTA, VERSAO); setTimeout(() => process.exit(0), 600); return v; },
+  verificar: async () => ({ ok: false, motivo: 'dev', atual: VERSAO }),
+  instalar: async () => { throw new Error('Atualizações só no app instalado.'); },
 };
 
 const ok = (res, obj, code = 200) => { res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify(obj)); };

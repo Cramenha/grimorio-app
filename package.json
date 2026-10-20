@@ -42,7 +42,6 @@
       "manual/Grimorio-do-Aventureiro-Manual.pdf",
       "!{extrair-,traduzir,revisar-,teste-}*",
       "!verificar-traducao.mjs",
-      "!construir-exe.mjs",
       "!reticle.local.js",
       "build/icon.ico"
     ],
