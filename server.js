@@ -104,6 +104,14 @@ async function rota(req, res) {
     res.writeHead(200, { 'Content-Type': TIPOS[path.extname(arq)] || 'application/octet-stream', 'Cache-Control': 'max-age=86400' });
     return res.end(fs.readFileSync(arq));
   }
+  // token do Reticle (verificação no navegador, só em desenvolvimento com `npm run web`): nunca dentro do Electron.
+  // Sem token responde um módulo vazio (e não 404), para o index.html não sujar o console do app com erro de rede.
+  if (req.method === 'GET' && p === '/reticle.local.js') {
+    const arq = path.join(PASTA, 'reticle.local.js');
+    const usar = !process.versions.electron && fs.existsSync(arq);
+    res.writeHead(200, { 'Content-Type': TIPOS['.js'], 'Cache-Control': 'no-cache' });
+    return res.end(usar ? fs.readFileSync(arq) : 'export const token = null;\n');
+  }
   if (req.method === 'GET' && !p.startsWith('/api/')) {
     const nome = p === '/' ? 'index.html' : p.slice(1);
     if (!ESTATICOS.has(nome)) { res.writeHead(404); return res.end('Não encontrado'); }

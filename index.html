@@ -92,5 +92,23 @@
   <script src="vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="app.js"></script>
   <script src="criatura.js"></script>
+  <!-- reticle:connect (dev only, written by reticle init) -->
+  <!-- Só conecta se o servidor entregar reticle.local.js: ele é gitignored, fica fora dos pacotes e o server.js
+       não o serve dentro do Electron (que também roda em localhost). Sem o arquivo, nada é baixado. -->
+  <script type="module">
+    import('./reticle.local.js').then(async (local) => {
+      if (!local.token) return;
+      const { reticle, registerStore } = await import('https://cdn.jsdelivr.net/npm/@reticlehq/browser@3.7.0/+esm');
+      reticle.connect({ projectId: 'fichas-rpg-f19531b4', token: local.token });
+      // estado do app (globais de app.js) para reticle_look { action: "state", store: "grimorio" }
+      registerStore('grimorio', () => ({
+        aba, idioma: IDIOMA,
+        personagem: P && { id: P.id, nome: P.nome, tipo: P.tipo || 'personagem', nivel: P.nivel, classe: P.classe?.nome, raca: P.raca?.nome, plataforma: P.plataforma },
+        calculo: CALC && { ca: CALC.ac, fort: CALC.fort, ref: CALC.ref, vont: CALC.vont, pv: CALC.pv, iniciativa: CALC.iniciativa, avisos: CALC.avisos?.length },
+        ficha: P,
+      }));
+    }).catch(() => {});
+  </script>
+  <!-- /reticle:connect -->
 </body>
 </html>

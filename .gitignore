@@ -6,3 +6,7 @@ launcher/Grimorio.exe
 Grimorio.exe
 *.log
 dist-desktop/
+reticle.local.js
+.reticle/
+.claude/settings.local.json
+.playwright-mcp/

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "deny": [
+      "mcp__fichas__write_file",
+      "mcp__fichas__edit_file",
+      "mcp__fichas__move_file",
+      "mcp__fichas__create_directory"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npx @reticlehq/server context --compact"
+          }
+        ]
+      }
+    ]
+  }
+}
