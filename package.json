@@ -40,6 +40,7 @@
       "electron/**",
       "extensao-roll20/**",
       "manual/Grimorio-do-Aventureiro-Manual.pdf",
+      "manual/manual.html",
       "!{extrair-,traduzir,revisar-,teste-}*",
       "!verificar-traducao.mjs",
       "!reticle.local.js",

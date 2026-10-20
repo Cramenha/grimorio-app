@@ -13,8 +13,9 @@
   <link href="vendor/@fontsource/signika/600.css" rel="stylesheet">
   <link href="vendor/@fontsource/signika/700.css" rel="stylesheet">
   <link href="style.css" rel="stylesheet">
+  <script src="tema.js"></script>
 </head>
-<body data-bs-theme="dark">
+<body>
   <nav id="topo">
     <div class="container-xl d-flex align-items-center gap-3 py-2 flex-wrap">
       <div class="marca" id="marca" title="Voltar aos personagens">🎲 Grimório do Aventureiro<small>FICHAS · ANOTAÇÕES · COMPÊNDIO 4E</small></div>
@@ -25,6 +26,8 @@
       <div class="ms-auto d-flex align-items-center gap-2">
         <button id="btn-atualizar" class="btn-rpg-sec btn-sm btn-discreto" title="Verificar atualizações / Check for updates">↻</button>
         <button id="btn-idioma" class="btn-rpg-sec btn-sm" title="Idioma dos textos do compêndio (o nome sempre mostra o original e a tradução)">🌐 Português</button>
+        <button id="btn-tema" class="btn-rpg-sec btn-sm"></button>
+        <button id="btn-manual" class="btn-rpg-sec btn-sm" title="Manual do usuário, numa janela própria">📖 Manual</button>
         <button id="btn-config" class="btn-rpg-sec btn-sm">⚙ Configurar</button>
       </div>
     </div>
@@ -37,7 +40,7 @@
   <!-- Seletor do compêndio -->
   <div class="modal fade" id="modalPicker" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="dark">
+      <div class="modal-content folha">
         <div class="d-flex align-items-center gap-2 mb-2"><h3 id="pk-titulo" class="mb-0 flex-grow-1"></h3><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="pk-filtros" class="row g-2 mb-2"></div>
         <div class="row g-3">
@@ -51,7 +54,7 @@
   <!-- Leitor do compêndio -->
   <div class="modal fade" id="modalLeitor" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="dark">
+      <div class="modal-content folha">
         <div class="text-end mb-2"><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="leitor"></div>
       </div>
@@ -61,7 +64,7 @@
   <!-- Grimório de poderes -->
   <div class="modal fade" id="grimorio" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content" data-bs-theme="dark">
+      <div class="modal-content">
         <div class="barra">
           <h3>📖 Grimório de Poderes</h3>
           <span id="gr-nome" class="titulo" style="color:var(--md-on-surface-variant)"></span>
@@ -82,7 +85,7 @@
   <!-- Configurações -->
   <div class="modal fade" id="modalConfig" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content folha" data-bs-theme="dark">
+      <div class="modal-content folha">
         <div class="d-flex align-items-center mb-2"><h3 class="mb-0 flex-grow-1">⚙ Configurações</h3><button class="btn-rpg-mini" data-bs-dismiss="modal">Fechar ✕</button></div>
         <div id="cfg-corpo"></div>
       </div>
@@ -102,7 +105,7 @@
       reticle.connect({ projectId: 'fichas-rpg-f19531b4', token: local.token });
       // estado do app (globais de app.js) para reticle_look { action: "state", store: "grimorio" }
       registerStore('grimorio', () => ({
-        aba, idioma: IDIOMA,
+        aba, idioma: IDIOMA, tema: temaAtual(),
         personagem: P && { id: P.id, nome: P.nome, tipo: P.tipo || 'personagem', nivel: P.nivel, classe: P.classe?.nome, raca: P.raca?.nome, plataforma: P.plataforma },
         calculo: CALC && { ca: CALC.ac, fort: CALC.fort, ref: CALC.ref, vont: CALC.vont, pv: CALC.pv, iniciativa: CALC.iniciativa, avisos: CALC.avisos?.length },
         ficha: P,

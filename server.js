@@ -26,7 +26,7 @@ fs.mkdirSync(PERS, { recursive: true });
 fs.mkdirSync(LIXEIRA, { recursive: true });
 
 const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.woff': 'font/woff' };
-const ESTATICOS = new Set(['index.html', 'app.js', 'criatura.js', 'style.css']);
+const ESTATICOS = new Set(['index.html', 'app.js', 'criatura.js', 'style.css', 'tema.js', 'manual/manual.html']);
 // Bootstrap e fontes servidos de node_modules (sem CDN: o app funciona offline). /vendor/<pacote>/<arquivo>
 const VENDOR = ['bootstrap/dist/', '@fontsource/cinzel/', '@fontsource/signika/'];
 

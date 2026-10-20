@@ -1,7 +1,7 @@
 // Grimório do Aventureiro (desktop): roda o mesmo server.js dentro do Electron e mostra o app numa janela própria.
 // Fichas em %APPDATA%\Grimório do Aventureiro\dados (fora da pasta de instalação e do OneDrive); compêndio em resources\compendio.
 // Atualizações: electron-updater pelos Releases do GitHub (o botão ↻ do app chama grimorioAtualizador via /api/versao e /api/atualizar).
-import { app, BrowserWindow, Menu, dialog, shell } from 'electron';
+import { app, BrowserWindow, Menu, dialog, nativeTheme, shell } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import updater from 'electron-updater';
@@ -51,7 +51,8 @@ globalThis.grimorioAtualizador = {
 
 let janela = null;
 function criarJanela() {
-  janela = new BrowserWindow({ width: 1400, height: 900, minWidth: 900, minHeight: 600, backgroundColor: '#0b0a13', autoHideMenuBar: true, title: 'Grimório do Aventureiro', icon: path.join(RAIZ, 'build', 'icon.ico'), show: false });
+  // fundo enquanto a página carrega: surface-dim do tema do sistema (a escolha salva no app só é lida depois, pelo tema.js)
+  janela = new BrowserWindow({ width: 1400, height: 900, minWidth: 900, minHeight: 600, backgroundColor: nativeTheme.shouldUseDarkColors ? '#0b0a13' : '#e3d9cd', autoHideMenuBar: true, title: 'Grimório do Aventureiro', icon: path.join(RAIZ, 'build', 'icon.ico'), show: false });
   janela.once('ready-to-show', () => { janela.maximize(); janela.show(); });
   // janelas do próprio app (ficha em janela separada, impressão de criatura) abrem no Electron; links externos vão para o navegador
   janela.webContents.setWindowOpenHandler(({ url }) => {

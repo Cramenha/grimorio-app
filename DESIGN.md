@@ -8,7 +8,7 @@ App de ficha de D&D 4e com estrutura de produto moderno (M3: tokens de cor, elev
 
 ## Personalidade
 
-Sóbrio e escuro por padrão, com um único ponto de calor (âmbar) reservado para ação/destaque. Estrutura previsível e com estados claros (M3), não ornamentada à mão como antes — a moldura de cantos entalhados do tema anterior **sai**.
+Sóbrio, com um único ponto de calor (âmbar) reservado para ação/destaque. Estrutura previsível e com estados claros (M3), não ornamentada à mão como antes — a moldura de cantos entalhados do tema anterior **sai**.
 
 ## Paleta M3 (seed colors reais, extraídos de foundryvtt.com nesta sessão)
 
@@ -21,6 +21,16 @@ M3 gera uma paleta tonal completa (0–100) a partir de poucas cores-semente; aq
 - **Seed `tertiary`** (opcional, 3º acento) = vermelho-sangue `#8E1B1B`, herdado do tema anterior só para o selo de poder "encontro" (regra de D&D 4e, informação, não decoração — ver Motivos).
 - **`error`** = vermelho M3 padrão (`#B3261E` claro / `#F2B8B5` escuro), não reaproveitar o `tertiary` acima para erro de formulário.
 - Cap do antislop (R-29): núcleo = primary (âmbar) + secondary (marrom-tan) + tertiary (vermelho, só no selo de poder) + 1 error; neutros (a escala `surface`/`on-surface` acima) não contam no limite.
+
+## Temas claro e escuro (decisão de 20/10/2026)
+
+Os dois temas usam as mesmas sementes acima; o escuro é o descrito nesta página, o claro usa os tons claros do M3 (primary âmbar escuro `#8a4d0f`, superfícies em pergaminho claro `#e3d9cd`→`#fffdfa`, texto em tinta marrom `#2b1e14`). Todos os pares de texto passam AA (4,5:1).
+
+- **Estado inicial**: o tema do sistema (`prefers-color-scheme`). **Botão no topo** (☀ Claro / ☾ Escuro) troca e grava a escolha, que passa a valer sobre o sistema. Lógica em `tema.js`, carregado no `<head>` antes de pintar.
+- **Tokens**: `style.css` define `:root` (escuro) e `:root[data-tema="claro"]`. Cor nova entra nos dois blocos; nada de cor fixa fora deles.
+- **Selos de poder no claro**: verde e vermelho viram containers claros; o "diário" continua escuro, porque preto é a cor da regra.
+- **Scrim de modal**: preto translúcido nos dois temas (M3), não a superfície.
+- **Manual** (`manual/manual.html`): usa os mesmos tokens e segue o tema do app quando aberto pelo botão 📖 Manual; o PDF do pacote sai no claro (`?tema=claro`), que é o que funciona impresso.
 
 ## Tipografia (escala M3: Display/Headline/Title/Body/Label, cada um L/M/S)
 

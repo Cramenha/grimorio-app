@@ -27,6 +27,30 @@
   /* ---- tipografia: Display/Headline em Cinzel (identidade), Title/Body/Label em Signika (fonte real da Foundry) ---- */
   --fonte-titulo: 'Cinzel', 'Palatino Linotype', serif;
   --fonte-corpo: 'Signika', 'Palatino Linotype', sans-serif;
+  color-scheme: dark;
+}
+/* Tema claro: mesmas sementes do DESIGN.md nos tons claros do M3 (o tema.js põe data-tema no <html>).
+   Pares de texto conferidos em AA (4,5:1). O selo "diário" continua escuro: preto é a cor da regra. */
+:root[data-tema="claro"] {
+  --md-primary: #8a4d0f; --md-on-primary: #ffffff; --md-primary-container: #ffdcb8; --md-on-primary-container: #2e1500;
+  --md-secondary: #6f5a4b; --md-on-secondary: #ffffff; --md-secondary-container: #f3dccb; --md-on-secondary-container: #281709;
+  --md-tertiary: #9c3a33; --md-on-tertiary: #ffffff; --md-tertiary-container: #ffdad4; --md-on-tertiary-container: #410001;
+  --md-error: #b3261e; --md-on-error: #ffffff; --md-error-container: #f9dedc; --md-on-error-container: #410e0b;
+  --md-success-container: #c6ecc1; --md-on-success-container: #0b3a10;
+  --md-warning-container: #ffdea8; --md-on-warning-container: #2a1800;
+  --md-surface-dim: #e3d9cd; --md-surface: #f7f1e9; --md-surface-bright: #fdf9f4;
+  --md-surface-container-lowest: #fffdfa; --md-surface-container-low: #f5eee5; --md-surface-container: #f0e8de;
+  --md-surface-container-high: #ebe2d6; --md-surface-container-highest: #e5dbce;
+  --md-on-surface: #2b1e14; --md-on-surface-variant: #56473b;
+  --md-outline: #85736a; --md-outline-variant: #d5c3b5;
+  --md-atwill-container: #c6ecc1; --md-on-atwill-container: #0b3a10;
+  --md-encounter-container: #ffdad4; --md-on-encounter-container: #5c1512;
+  --md-daily-container: #2f2c34; --md-on-daily-container: #ece6f0;
+  --md-item-container: #ffdcb8; --md-on-item-container: #2e1500;
+  --elev-1: 0 1px 2px rgba(60,40,20,.18), 0 1px 3px 1px rgba(60,40,20,.08);
+  --elev-2: 0 1px 2px rgba(60,40,20,.18), 0 2px 6px 2px rgba(60,40,20,.08);
+  --elev-3: 0 4px 8px 3px rgba(60,40,20,.1), 0 1px 3px rgba(60,40,20,.18);
+  color-scheme: light;
 }
 html, body { min-height: 100%; }
 body {
@@ -222,6 +246,7 @@ body.gr-pagina #gr-pagina .modal-content { height: 100vh; min-height: 0; border-
 
 /* ---------- modais ---------- */
 .modal-backdrop.show { opacity: .7; background: var(--md-surface-dim); }
+[data-tema="claro"] .modal-backdrop.show { opacity: .32; background: #000; } /* scrim do M3: escurece também no tema claro */
 .res-tab { width: 100%; font-size: .98rem; } .res-tab tr { cursor: pointer; } .res-tab tr:hover td { background: color-mix(in srgb, var(--md-primary) 10%, transparent); } .res-tab td, .res-tab th { padding: .18rem .45rem; border-bottom: 1px dotted var(--md-outline-variant); }
 .res-tab tr.sel td { background: var(--md-primary-container); color: var(--md-on-primary-container); }
 #toasts { position: fixed; bottom: 1rem; right: 1rem; z-index: 2000; display: flex; flex-direction: column; gap: .5rem; max-width: 420px; }

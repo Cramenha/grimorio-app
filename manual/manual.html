@@ -3,131 +3,111 @@
 <head>
 <meta charset="utf-8">
 <title>Grimório do Aventureiro — Manual do Usuário</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<!-- Servido pelo app em /manual/manual.html: fontes, cores (tokens --md-* nos dois temas) e o tema vêm do próprio app.
+     O PDF é impresso daqui com ?tema=claro. -->
+<link href="../vendor/@fontsource/cinzel/400.css" rel="stylesheet">
+<link href="../vendor/@fontsource/cinzel/700.css" rel="stylesheet">
+<link href="../vendor/@fontsource/signika/400.css" rel="stylesheet">
+<link href="../vendor/@fontsource/signika/600.css" rel="stylesheet">
+<link href="../vendor/@fontsource/signika/700.css" rel="stylesheet">
+<link href="../style.css" rel="stylesheet">
+<script src="../tema.js"></script>
 <style>
-:root{
-  --perg:#f2e4c0; --perg2:#e7d3a2; --perg3:#d9bf85;
-  --tinta:#2b1a0e; --tinta2:#5a3d22;
-  --sangue:#8e1b1b; --sangue2:#b02a2a;
-  --ouro:#b8861b; --ouro2:#e0b64a;
-  --couro:#1a110b; --couro2:#2b1c12;
-  --fonte-titulo:'Cinzel',serif; --fonte-corpo:'Crimson Pro',Georgia,serif;
-  --canto:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 26 26' fill='none' stroke='%234a2f19' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 25V7Q1 1 7 1H25' stroke-width='1.8'/%3E%3Cpath d='M6 25V12Q6 6 12 6H25' stroke-width='.8' opacity='.65'/%3E%3Cpath d='M9 5.6L12.4 9 9 12.4 5.6 9Z' fill='%23b8861b' stroke-width='.7'/%3E%3C/svg%3E");
-}
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#0c0806}
-body{font-family:var(--fonte-corpo);color:var(--tinta);font-size:12.3pt;line-height:1.5}
+html,body{margin:0;padding:0}
+body{font-family:var(--fonte-corpo);color:var(--md-on-surface);background:var(--md-surface-dim);font-size:11.5pt;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 @page{size:A4;margin:0}
-h1,h2,h3,h4,.tit{font-family:var(--fonte-titulo);letter-spacing:.03em}
+h1,h2,h3,h4,.tit{letter-spacing:normal}
 
-/* ---------- página A4 fixa ---------- */
-.pagina{
-  position:relative; width:210mm; height:297mm; overflow:hidden;
-  page-break-after:always; break-after:page;
-  background:
-    radial-gradient(ellipse at 20% 15%, rgba(255,255,255,.18), transparent 55%),
-    radial-gradient(ellipse at 85% 90%, rgba(0,0,0,.08), transparent 55%),
-    var(--perg);
-  border:3px solid var(--tinta);
-}
-.pagina:last-child{page-break-after:avoid}
-.pagina::before{ /* moldura interna fina */
-  content:''; position:absolute; inset:9mm; border:1.4px solid var(--tinta2); opacity:.55; pointer-events:none;
-}
-.pagina::after{content:none}
-.canto{position:absolute; width:30px; height:30px; background:var(--canto) center/contain no-repeat; opacity:.9}
-.canto.tl{top:6mm; left:6mm}
-.canto.tr{top:6mm; right:6mm; transform:scaleX(-1)}
-.canto.bl{bottom:6mm; left:6mm; transform:scaleY(-1)}
-.canto.br{bottom:6mm; right:6mm; transform:scale(-1,-1)}
+/* ---------- página A4 fixa: na tela, folhas soltas sobre o fundo; no PDF, uma por página ---------- */
+.pagina{position:relative;width:210mm;height:297mm;overflow:hidden;margin:8mm auto;background:var(--md-surface);border-radius:var(--shape-md);box-shadow:var(--elev-2);break-after:page}
+.pagina:last-child{break-after:auto}
+@media print{body{background:none}.pagina{margin:0;border-radius:0;box-shadow:none}}
 
-.miolo{position:absolute; inset:16mm 17mm 15mm 17mm; display:flex; flex-direction:column}
-.cabecalho{display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px double var(--ouro); padding-bottom:3mm; margin-bottom:6mm; font-family:var(--fonte-titulo); font-size:8.3pt; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta2)}
-.cabecalho b{color:var(--sangue); letter-spacing:.06em}
-.corpo{flex:1; overflow:hidden}
-.rodape{display:flex; justify-content:space-between; align-items:center; border-top:2px double var(--ouro); padding-top:2.5mm; margin-top:5mm; font-family:var(--fonte-titulo); font-size:7.6pt; letter-spacing:.1em; color:var(--tinta2); text-transform:uppercase}
-.rodape .pag{color:var(--ouro); font-weight:700}
+.miolo{position:absolute;inset:14mm 17mm 13mm;display:flex;flex-direction:column}
+.cabecalho,.rodape{display:flex;justify-content:space-between;align-items:baseline;font-size:8pt;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--md-on-surface-variant)}
+.cabecalho{border-bottom:1px solid var(--md-outline-variant);padding-bottom:2.5mm;margin-bottom:7mm}
+.cabecalho b{color:var(--md-on-surface)}
+.corpo{flex:1;overflow:hidden}
+.rodape{border-top:1px solid var(--md-outline-variant);padding-top:2.5mm;margin-top:5mm}
+.rodape .pag{color:var(--md-primary);font-weight:700}
 
-/* ---------- títulos ---------- */
-h1.titulo-secao{font-size:24pt; color:var(--sangue); margin:0 0 1mm; text-shadow:0 1px 0 rgba(255,255,255,.4)}
-.numero-secao{font-family:var(--fonte-titulo); color:var(--ouro); font-size:10.5pt; letter-spacing:.2em; text-transform:uppercase; margin-bottom:1.5mm}
-.lead{font-style:italic; color:var(--tinta2); font-size:12.6pt; margin:2mm 0 6mm; border-left:3px solid var(--ouro); padding-left:5mm}
-h2.sub{font-size:14.5pt; color:var(--sangue2); border-bottom:1.6px solid var(--tinta); padding-bottom:1.2mm; margin:5mm 0 3mm}
-h3.sub3{font-family:var(--fonte-titulo); font-size:11.5pt; color:var(--tinta); margin:4mm 0 1.5mm}
+/* ---------- títulos (escala M3: Headline em Cinzel, Title/Body/Label em Signika) ---------- */
+.numero-secao{font-size:9pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--md-primary);margin-bottom:1mm}
+h1.titulo-secao{font-family:var(--fonte-titulo);font-size:24pt;font-weight:700;line-height:1.15;color:var(--md-on-surface);margin:0}
+.lead{font-size:12.5pt;color:var(--md-on-surface-variant);margin:2.5mm 0 6mm;max-width:160mm}
+h2.sub{font-family:var(--fonte-titulo);font-size:14pt;font-weight:700;color:var(--md-on-surface);border-bottom:1px solid var(--md-outline-variant);padding-bottom:1.2mm;margin:6mm 0 3mm}
+h3.sub3{font-family:var(--fonte-corpo);font-size:11.5pt;font-weight:700;color:var(--md-on-surface);margin:4.5mm 0 1.2mm}
 p{margin:0 0 2.6mm}
-ul,ol{margin:0 0 3mm; padding-left:5mm}
+ul,ol{margin:0 0 3mm;padding-left:5mm}
 li{margin-bottom:1.2mm}
-b,strong{color:var(--tinta)}
-.destaque{color:var(--sangue); font-weight:700}
-code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,26,14,.08); border:1px solid rgba(43,26,14,.22); border-radius:3px; padding:0 .35em; font-size:.92em}
+b,strong{font-weight:700}
+.destaque{color:var(--md-primary);font-weight:700}
+code,.tecla{font-family:Consolas,'Courier New',monospace;font-size:.9em;background:var(--md-surface-container-highest);border-radius:var(--shape-xs);padding:0 .35em}
 
-/* ---------- caixas ---------- */
-.caixa{border-radius:6px; padding:3mm 4.5mm; margin:3mm 0; font-size:11pt}
-.caixa-dica{background:rgba(184,134,27,.12); border:1.4px solid var(--ouro)}
-.caixa-dica .rot{font-family:var(--fonte-titulo); color:var(--ouro); font-weight:700; font-size:9.5pt; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1mm}
-.caixa-importante{background:rgba(142,27,27,.09); border:1.4px solid var(--sangue)}
-.caixa-importante .rot{font-family:var(--fonte-titulo); color:var(--sangue); font-weight:700; font-size:9.5pt; letter-spacing:.06em; text-transform:uppercase; margin-bottom:1mm}
-.caixa-exemplo{background:var(--couro); color:#e9d9a8; border:1.4px solid var(--ouro); border-radius:6px; padding:3mm 4.5mm; font-family:'Consolas','Courier New',monospace; font-size:9.6pt; line-height:1.55; margin:3mm 0; white-space:pre-wrap; word-break:break-word}
-.caixa-exemplo .rot{font-family:var(--fonte-titulo); color:var(--ouro2); font-weight:700; font-size:9pt; letter-spacing:.08em; text-transform:uppercase; margin-bottom:1.5mm}
-.caixa-exemplo .q{color:#f0c86a}
-.caixa-exemplo .n{color:#9fd49f}
+/* ---------- caixas: superfície tonal (M3), sem moldura ---------- */
+.caixa-dica,.caixa-importante,.caixa-exemplo{border-radius:var(--shape-md);padding:3mm 4.5mm;margin:3.5mm 0;font-size:10.8pt}
+.rot{font-size:8.5pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1mm}
+.caixa-dica{background:var(--md-surface-container-high)}
+.caixa-dica .rot{color:var(--md-primary)}
+.caixa-importante{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.caixa-exemplo{background:var(--md-surface-container-lowest);border:1px solid var(--md-outline-variant);font-family:Consolas,'Courier New',monospace;font-size:9.4pt;line-height:1.55;white-space:pre-wrap;word-break:break-word}
+.caixa-exemplo .rot{font-family:var(--fonte-corpo);color:var(--md-on-surface-variant)}
+.caixa-exemplo .q{color:var(--md-primary);font-weight:700}
+.caixa-exemplo .n{color:var(--md-primary);font-weight:700}
 
 /* ---------- passos numerados ---------- */
-.passos{list-style:none; padding:0; margin:3mm 0}
-.passos li{display:flex; gap:3.5mm; margin-bottom:2.6mm; align-items:flex-start}
-.selo{flex:none; width:7mm; height:7mm; border-radius:50%; background:radial-gradient(var(--ouro2),var(--ouro)); color:var(--tinta); font-family:var(--fonte-titulo); font-weight:700; font-size:9.5pt; display:grid; place-items:center; box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.passos{list-style:none;padding:0;margin:3mm 0}
+.passos li{display:flex;gap:3.5mm;margin-bottom:2.6mm;align-items:flex-start}
+.selo{flex:none;width:6.5mm;height:6.5mm;border-radius:var(--shape-full);background:var(--md-primary-container);color:var(--md-on-primary-container);font-weight:700;font-size:9pt;display:grid;place-items:center}
 
-/* ---------- grade de funções ---------- */
-.grade{display:grid; grid-template-columns:1fr 1fr; gap:3mm; margin:3mm 0}
+/* ---------- grade de funções: cartões tonais ---------- */
+.grade{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin:3.5mm 0}
 .grade.c3{grid-template-columns:1fr 1fr 1fr}
-.fcard{border:1.4px solid var(--tinta2); border-radius:6px; padding:2.6mm 3.4mm; background:rgba(255,255,255,.28)}
-.fcard .ic{font-size:14pt; margin-bottom:.8mm}
-.fcard .tit{font-family:var(--fonte-titulo); font-weight:700; font-size:10.3pt; color:var(--sangue); margin-bottom:.6mm}
-.fcard p{font-size:10.3pt; margin:0}
+.fcard{background:var(--md-surface-container);border-radius:var(--shape-md);padding:3mm 3.6mm}
+.fcard .ic{font-size:13pt;line-height:1;margin-bottom:1.4mm}
+.fcard .tit{font-weight:700;font-size:10.4pt;color:var(--md-on-surface);margin-bottom:.6mm}
+.fcard p{font-size:10pt;color:var(--md-on-surface-variant);margin:0}
 
-/* ---------- botão ilustrativo ---------- */
-.botao-mini{display:inline-block; font-family:var(--fonte-titulo); font-weight:700; font-size:9.6pt; letter-spacing:.04em; padding:.9mm 2.6mm; border-radius:4px; border:1.6px solid var(--tinta); background:linear-gradient(var(--ouro2),var(--ouro)); color:var(--tinta)}
-.botao-mini.sec{background:linear-gradient(var(--perg),var(--perg3))}
+/* ---------- botões ilustrativos: os mesmos do app (preenchido e tonal; R20 = botão de macro) ---------- */
+.botao-mini{display:inline-block;font-weight:600;font-size:9.2pt;padding:.5mm 2.6mm;border-radius:var(--shape-full);background:var(--md-primary);color:var(--md-on-primary);white-space:nowrap}
+.botao-mini.sec{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.tag-roll{display:inline-block;font-weight:600;font-size:7.6pt;letter-spacing:.06em;padding:.2mm 1.4mm;border:1px solid var(--md-outline);border-radius:var(--shape-xs);color:var(--md-on-surface-variant);vertical-align:middle}
 
-/* ---------- capa ---------- */
-.capa{display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:0 20mm}
-.capa .emblema{font-size:58pt; margin-bottom:4mm; filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
-.capa .titulo-capa{font-size:40pt; color:var(--sangue); line-height:1.08; margin-bottom:3mm; text-shadow:0 2px 0 rgba(255,255,255,.35)}
-.capa .sub-capa{font-family:var(--fonte-titulo); font-size:15pt; letter-spacing:.3em; text-transform:uppercase; color:var(--tinta2); margin-bottom:10mm}
-.capa .linha-orn{width:60mm; height:2px; background:linear-gradient(90deg,transparent,var(--ouro),transparent); margin:6mm 0}
-.capa .rodape-capa{position:absolute; bottom:14mm; font-family:var(--fonte-titulo); font-size:9.5pt; letter-spacing:.14em; color:var(--tinta2); text-transform:uppercase}
+/* ---------- capa e página final ---------- */
+.capa,.final{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center}
+.capa{padding:0 22mm;background:var(--md-surface-container-low)}
+.emblema{font-size:44pt;line-height:1;margin-bottom:7mm}
+.capa .titulo-capa{font-family:var(--fonte-titulo);font-size:38pt;font-weight:700;line-height:1.1;color:var(--md-on-surface);margin-bottom:4mm}
+.capa .sub-capa{font-size:12pt;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--md-primary);margin-bottom:9mm}
+.capa .linha-orn{width:24mm;height:2px;background:var(--md-primary);margin:0 0 9mm}
+.capa .chamada{font-size:13pt;color:var(--md-on-surface-variant);max-width:120mm}
+.capa .rodape-capa{position:absolute;bottom:16mm;font-size:8.5pt;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--md-on-surface-variant)}
+.final{padding:0 24mm}
+.final h2{font-family:var(--fonte-titulo);font-size:20pt;color:var(--md-on-surface);margin:0 0 4mm}
+.final p{font-size:12pt;color:var(--md-on-surface-variant);max-width:140mm}
+.assinatura{margin-top:12mm;font-family:var(--fonte-titulo);font-size:15pt;font-weight:700;color:var(--md-primary)}
+.assinatura small{display:block;font-family:var(--fonte-corpo);font-size:8.5pt;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--md-on-surface-variant);margin-top:1.5mm}
 
 /* ---------- sumário ---------- */
-.sumario{column-count:2; column-gap:10mm}
-.sitem{display:flex; align-items:baseline; gap:2mm; margin-bottom:3.2mm; break-inside:avoid}
-.sitem .sn{font-family:var(--fonte-titulo); color:var(--ouro); font-weight:700; font-size:10.5pt; flex:none; width:6mm}
-.sitem .st{font-weight:600; color:var(--tinta); font-size:10.8pt}
-.sitem .sd{flex:1; border-bottom:1.6px dotted var(--tinta2); margin:0 1.5mm; transform:translateY(-1.5px)}
-.sitem .sp{font-family:var(--fonte-titulo); font-size:9.5pt; color:var(--tinta2)}
-
-/* ---------- página final ---------- */
-.final{display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:0 22mm}
-.final .emblema{font-size:40pt; margin-bottom:5mm}
-.final h2{font-size:19pt; color:var(--sangue); margin-bottom:4mm}
-.final p{font-size:12.6pt; max-width:140mm}
-.assinatura{margin-top:12mm; font-family:var(--fonte-titulo); font-size:15pt; letter-spacing:.1em; color:var(--ouro)}
-.assinatura small{display:block; font-size:9pt; letter-spacing:.2em; color:var(--tinta2); margin-top:1.5mm; text-transform:uppercase}
-
-.tag-roll{display:inline-block; font-family:var(--fonte-titulo); font-weight:700; font-size:8.5pt; letter-spacing:.06em; color:var(--tinta); background:linear-gradient(var(--ouro2),var(--ouro)); border:1.3px solid var(--tinta); border-radius:4px; padding:.5mm 2mm; vertical-align:middle}
+.sumario{column-count:2;column-gap:10mm}
+.sitem{display:flex;align-items:baseline;gap:2mm;margin-bottom:3.4mm;break-inside:avoid}
+.sitem .sn{flex:none;width:6mm;font-weight:700;font-size:10pt;color:var(--md-primary)}
+.sitem .st{font-weight:600;font-size:10.8pt;color:var(--md-on-surface)}
+.sitem .sd{flex:1;border-bottom:1px dotted var(--md-outline);margin:0 1.5mm;transform:translateY(-2px)}
+.sitem .sp{font-size:9.5pt;color:var(--md-on-surface-variant)}
 </style>
 </head>
 <body>
 
 <!-- ============================================================ CAPA -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="capa">
-    <div class="emblema">⚔</div>
+    <div class="emblema">🎲</div>
     <div class="titulo-capa">GRIMÓRIO<br>DO AVENTUREIRO</div>
     <div class="sub-capa">Manual do Usuário</div>
     <div class="linha-orn"></div>
-    <p style="font-style:italic;color:var(--tinta2);font-size:12.5pt;max-width:120mm">
+    <p class="chamada">
       Fichas, poderes e magia de bolso para o seu D&amp;D 4ª edição — do papel à mesa, do Roll20 à aventura.
     </p>
     <div class="rodape-capa">Guia completo de funções e macros</div>
@@ -136,7 +116,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ SUMÁRIO -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Grimório do Aventureiro</span><b>Sumário</b></div>
     <div class="corpo">
@@ -170,17 +149,16 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 01 PRIMEIROS PASSOS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 01</span><b>Primeiros passos</b></div>
     <div class="corpo">
       <div class="numero-secao">Capítulo 01</div>
       <h1 class="titulo-secao">Primeiros passos</h1>
-      <div class="lead">Sem instalar nada complicado: dê dois cliques e comece a jogar.</div>
+      <div class="lead">Instale uma vez, abra pelo atalho e comece a jogar.</div>
 
       <h2 class="sub">Abrindo o programa</h2>
-      <p>O Grimório roda sozinho no seu computador, sem precisar de internet depois de instalado e sem login. Dê dois cliques no atalho <b>Grimório do Aventureiro</b> na área de trabalho (ou no arquivo <b>Grimorio.exe</b>, se você recebeu a versão em pasta): um ícone aparece na bandeja do sistema e o programa abre sozinho no seu navegador, em <code>http://localhost:3102</code>.</p>
-      <p>Para fechar de verdade, clique com o botão direito no ícone da bandeja e escolha <b>Sair</b>. Só fechar a aba do navegador deixa o programa rodando em segundo plano — o que é útil: ele continua salvando tudo.</p>
+      <p>O Grimório roda sozinho no seu computador, sem precisar de internet depois de instalado e sem login. Execute o instalador <b>Grimorio-Setup</b> uma vez; depois, dê dois cliques no atalho <b>Grimório do Aventureiro</b> na área de trabalho ou no menu Iniciar. O programa abre numa janela própria.</p>
+      <p>Para fechar, basta fechar a janela. Tudo já foi salvo enquanto você usava.</p>
 
       <h2 class="sub">A tela inicial</h2>
       <p>É o ponto de partida de cada sessão. Nela você encontra:</p>
@@ -199,7 +177,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 02 CRIANDO E IMPORTANDO -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 02</span><b>Criando e importando fichas</b></div>
     <div class="corpo">
@@ -229,7 +206,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 03 A FICHA -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 03</span><b>A ficha do personagem</b></div>
     <div class="corpo">
@@ -260,7 +236,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 04 CÁLCULO AUTOMÁTICO -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 04</span><b>Atributos, defesas e cálculo automático</b></div>
     <div class="corpo">
@@ -290,7 +265,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 05 INVENTÁRIO -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 05</span><b>Inventário: comprar e equipar</b></div>
     <div class="corpo">
@@ -319,7 +293,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 06 AUGMENTS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 06</span><b>Augments 💎</b></div>
     <div class="corpo">
@@ -347,7 +320,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 07 SEUS NÚMEROS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 07</span><b>Seus números com cada arma</b></div>
     <div class="corpo">
@@ -374,7 +346,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 08 GRIMÓRIO DE PODERES -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 08</span><b>O Grimório de poderes</b></div>
     <div class="corpo">
@@ -399,7 +370,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 09 ANOTAÇÕES -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 09</span><b>Anotações flutuantes</b></div>
     <div class="corpo">
@@ -422,7 +392,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 10 CRIATURAS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 10</span><b>Criaturas do mestre</b></div>
     <div class="corpo">
@@ -448,7 +417,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 11 EXPORTAÇÕES -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 11</span><b>Exportando a ficha</b></div>
     <div class="corpo">
@@ -471,7 +439,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 12 O AUGE PARTE 1 -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 12 · ★</span><b>O auge: macros para o Roll20</b></div>
     <div class="corpo">
@@ -505,7 +472,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 13 O AUGE PARTE 2 -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 13 · ★</span><b>Magia, item e joia na macro</b></div>
     <div class="corpo">
@@ -534,7 +500,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 14 O AUGE PARTE 3 — CONDICIONAIS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 14 · ★</span><b>Perguntas inteligentes na rolagem</b></div>
     <div class="corpo">
@@ -567,7 +532,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 15 FICHA INTEIRA NO ROLL20 -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 15</span><b>A ficha inteira dentro do Roll20</b></div>
     <div class="corpo">
@@ -601,7 +565,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 16 SEGURANÇA DOS DADOS -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 16</span><b>Seus dados estão seguros</b></div>
     <div class="corpo">
@@ -618,7 +581,7 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
       <p>O cartão <b>🛡 Seus dados</b>, na tela inicial, mostra exatamente qual pasta está sendo usada e reúne os três botões: <span class="botao-mini">Backup de tudo</span>, <span class="botao-mini sec">Restaurar backup</span> e <span class="botao-mini sec">Lixeira</span>.</p>
 
-      <div class="caixa-importante"><div class="rot">⚠ Atenção</div>Se você usa mais de uma cópia do programa (por exemplo, uma pasta própria e uma pasta de um grupo de amigos), confira sempre no cartão <b>🛡 Seus dados</b> qual pasta está aberta antes de editar — cada cópia guarda as suas fichas separadamente.</div>
+      <div class="caixa-importante"><div class="rot">⚠ Atenção</div>Se você usava a versão antiga (o <b>Grimorio.exe</b> numa pasta ou o arquivo <b>.bat</b>), as suas fichas continuam na pasta <b>dados</b> dela. Para trazê-las, abra a versão antiga, clique em <span class="botao-mini">Backup de tudo</span> e, no Grimório novo, em <span class="botao-mini sec">Restaurar backup</span>.</div>
     </div>
     <div class="rodape"><span>Grimório do Aventureiro</span><span class="pag">19</span></div>
   </div>
@@ -626,7 +589,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 17 ATUALIZAÇÕES -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 17</span><b>Mantendo o Grimório atualizado</b></div>
     <div class="corpo">
@@ -651,7 +613,6 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ 18 FAQ -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="miolo">
     <div class="cabecalho"><span>Capítulo 18</span><b>Dicas rápidas e perguntas frequentes</b></div>
     <div class="corpo">
@@ -683,9 +644,8 @@ code,.tecla{font-family:'Consolas','Courier New',monospace; background:rgba(43,2
 
 <!-- ============================================================ PÁGINA FINAL -->
 <div class="pagina">
-  <div class="canto tl"></div><div class="canto tr"></div><div class="canto bl"></div><div class="canto br"></div>
   <div class="final">
-    <div class="emblema">⚔</div>
+    <div class="emblema">🎲</div>
     <h2>Boa aventura!</h2>
     <p>O Grimório existe para tirar o peso das contas de cima da mesa e devolver o tempo para a história. Que seus dados nunca falhem, seus críticos sejam frequentes e suas macros rolem sempre certas.</p>
     <div class="assinatura">by Cramenha<small>Grimório do Aventureiro</small></div>

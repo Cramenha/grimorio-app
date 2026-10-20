@@ -75,6 +75,14 @@ function ligarIdioma() {
   b.textContent = IDIOMA === 'pt' ? '🌐 Português' : '🌐 English';
   b.onclick = () => { IDIOMA = IDIOMA === 'pt' ? 'en' : 'pt'; localStorage.setItem('idioma', IDIOMA); ligarIdioma(); redesenharTextos(); };
 }
+// tema: o estado inicial vem do tema.js (sistema ou escolha salva); o botão troca e grava a escolha
+function ligarTema() {
+  const b = $('#btn-tema');
+  const claro = temaAtual() === 'claro';
+  b.textContent = claro ? '☀ Claro' : '☾ Escuro';
+  b.title = claro ? 'Tema claro. Clique para usar o escuro' : 'Tema escuro. Clique para usar o claro';
+  b.onclick = () => { escolherTema(claro ? 'escuro' : 'claro'); ligarTema(); };
+}
 function redesenharTextos() {
   if ($('#grimorio.show') || document.body.classList.contains('gr-pagina')) desenharGrimorio();
   if ($('#modalLeitor.show') && leitorAtual) abrirLeitor(leitorAtual.cat, leitorAtual.id);
@@ -476,7 +484,7 @@ async function importar(arq) {
   if (!arq) return;
   const el = $('#principal');
   const pdf = /\.pdf$/i.test(arq.name);
-  el.innerHTML = `<div class="folha carregando" style="color:var(--tinta)"><span class="spin"></span> Lendo <b>${esc(arq.name)}</b>…</div>`;
+  el.innerHTML = `<div class="folha carregando"><span class="spin"></span> Lendo <b>${esc(arq.name)}</b>…</div>`;
   try {
     const base64 = await new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result.split(',')[1]); r.onerror = no; r.readAsDataURL(arq); });
     let r = await api('/api/importar', { method: 'POST', body: { nome: arq.name, base64 } });
@@ -493,7 +501,7 @@ Cancelar = criar uma ficha NOVA separada`) ? 'atualizar' : 'nova';
     abrirPersonagem(f.id);
   } catch (e) {
     await desenharHome();
-    $('#principal').insertAdjacentHTML('afterbegin', `<div class="folha mb-3" style="border-color:var(--sangue)"><h3>Não consegui importar ${esc(arq.name)}</h3><p class="mb-1">${esc(e.message)}</p>${pdf ? '<p class="mb-0 rotulo">Dica: abra a ficha no app e use ⬇ PDF editável; esse PDF você preenche no leitor de PDF e importa de volta.</p>' : ''}<button class="btn-rpg-mini mt-2" onclick="this.closest('.folha').remove()">Fechar</button></div>`);
+    $('#principal').insertAdjacentHTML('afterbegin', `<div class="folha mb-3" style="border-color:var(--md-error)"><h3>Não consegui importar ${esc(arq.name)}</h3><p class="mb-1">${esc(e.message)}</p>${pdf ? '<p class="mb-0 rotulo">Dica: abra a ficha no app e use ⬇ PDF editável; esse PDF você preenche no leitor de PDF e importa de volta.</p>' : ''}<button class="btn-rpg-mini mt-2" onclick="this.closest('.folha').remove()">Fechar</button></div>`);
   }
 }
 
@@ -963,7 +971,7 @@ function abaNotas() {
   c.innerHTML = `<div class="folha"><div class="d-flex gap-2 flex-wrap align-items-center mb-2"><h2 class="flex-grow-1 mb-0">Janelas de anotações</h2>
     <button class="btn-rpg" id="nova-nota">＋ Nova janela de anotações</button></div>
     <p class="text-muted">Cada janela é um bloco de notas separado, com nome editável. Elas ficam flutuando por cima da tela (arraste, redimensione, minimize) e tudo é salvo sozinho no histórico do personagem.</p>
-    <div class="row g-2">${P.notas.map((n) => `<div class="col-md-6 col-lg-4"><div class="folha h-100" style="padding:.7rem .9rem"><div class="d-flex gap-2"><b class="flex-grow-1 titulo" style="color:var(--sangue)">${esc(n.titulo)}</b>
+    <div class="row g-2">${P.notas.map((n) => `<div class="col-md-6 col-lg-4"><div class="folha h-100" style="padding:.7rem .9rem"><div class="d-flex gap-2"><b class="flex-grow-1 titulo" style="color:var(--md-primary)">${esc(n.titulo)}</b>
       <button class="btn-rpg-mini" data-abrir="${n.id}">${n.janela?.aberta ? 'Trazer' : 'Abrir'}</button><button class="btn-rpg-mini" data-excl="${n.id}">🗑</button></div>
       <div class="rotulo">editado ${dataBR(n.editado)} · ${(n.texto || '').length} caract.</div>
       <div style="max-height:4.6rem;overflow:hidden;white-space:pre-wrap;font-size:.95rem">${esc((n.texto || '').slice(0, 220))}</div></div></div>`).join('')}</div></div>`;
@@ -1150,6 +1158,9 @@ function ligarAtualizacao() {
 }
 
 ligarIdioma();
+ligarTema();
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => setTimeout(ligarTema)); // o tema.js troca primeiro
+$('#btn-manual').onclick = () => window.open('manual/manual.html', 'manual', 'width=900,height=1000');
 ligarAtualizacao();
 if (GRIM_ID) abrirGrimorioPagina(GRIM_ID); else desenharHome();
 
