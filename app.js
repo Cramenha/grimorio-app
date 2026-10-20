@@ -436,7 +436,7 @@ async function desenharHome() {
     <div class="d-flex align-items-center mb-3 gap-2 flex-wrap"><h2 class="titulo m-0 flex-grow-1" style="color:var(--ouro2)">Seus aventureiros</h2>
       <label class="btn-rpg-sec m-0" title="Aceita .dnd4e (Character Builder), .json (ficha exportada daqui) e PDF">📥 Importar ficha<input type="file" id="arq-imp" accept=".pdf,.dnd4e,.xml,.json" hidden></label>
       <button class="btn-rpg" id="novo-pers">＋ Novo personagem</button>
-      <button class="btn-rpg" id="nova-criatura" style="background:linear-gradient(#8e1b1b,#5a1111)" title="Monstros, chefes e NPCs para o mestre">🐉 Nova criatura</button></div>
+      <button class="btn-rpg" id="nova-criatura" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)" title="Monstros, chefes e NPCs para o mestre">🐉 Nova criatura</button></div>
     <div class="row g-3">${lista.filter((p) => p.tipo !== 'criatura').map(cartaoHome).join('')}
       ${lista.some((p) => p.tipo !== 'criatura') ? '' : '<div class="col-12"><div class="folha cartao-novo">Nenhum personagem ainda. Crie um novo ou importe uma ficha.</div></div>'}</div>
     ${lista.some((p) => p.tipo === 'criatura') ? `<h2 class="titulo mt-4 mb-3" style="color:var(--ouro2)">Criaturas do mestre</h2><div class="row g-3">${lista.filter((p) => p.tipo === 'criatura').map(cartaoHome).join('')}</div>` : ''}`;
@@ -860,7 +860,7 @@ async function escolherVariante(cat, id, nome, extra = {}) {
   return new Promise((resolve) => {
     $('#leitor').innerHTML = `<h3>${esc(nome)}</h3><p class="text-muted">Seu personagem é nível <b>${P.nivel}</b>. Ouro: <b>${po(P.ouro)} po</b>.</p>
       <div id="vars">${vs.map((v, i) => `<label class="lista-item" style="cursor:pointer"><input type="radio" name="var" value="${i}" ${v === padrao ? 'checked' : ''}>
-        <span class="nm">${v.mais ? '+' + v.mais : 'Padrão'} · nível ${v.nivel}</span>${v.nivel > P.nivel ? '<span class="tag" style="background:#f0b4a8">acima do seu nível</span>' : ''}<b>${po(v.custo)} po</b></label>`).join('')}</div>
+        <span class="nm">${v.mais ? '+' + v.mais : 'Padrão'} · nível ${v.nivel}</span>${v.nivel > P.nivel ? '<span class="tag" style="background:var(--md-warning-container);color:var(--md-on-warning-container)">acima do seu nível</span>' : ''}<b>${po(v.custo)} po</b></label>`).join('')}</div>
       <label class="mt-2 d-block"><input type="checkbox" id="var-desc" checked> Descontar do ouro</label>
       <div class="text-end mt-2"><button class="btn-rpg-mini" id="var-cancel">Cancelar</button> <button class="btn-rpg" id="var-ok">${extra.rotuloOk || 'Comprar'}</button></div>`;
     modal('modalLeitor').show();
@@ -910,7 +910,7 @@ async function abaInventario() {
       const pode = ['armor', 'weapon', 'implement'].includes(it.cat) && it.base?.id && !it.ench;
       return `<div class="lista-item" data-id="${it.id}"><input type="checkbox" class="form-check-input" data-eq title="Equipado (os bônus entram no cálculo)" ${it.equipado ? 'checked' : ''}>
         <span class="nm" data-ver>${esc(nomeItem(it))}</span>${it.ench?.id || it.ref?.id ? btnMacro(it.ench?.id || it.ref.id) : ''}
-        ${it._escudo ? '<span class="tag">Escudo</span>' : ''}${it.cat === 'item' || it.ench ? '<span class="tag item">Mágico</span>' : ''}${nv ? `<small>nív. ${nv}</small>` : ''}${acima ? '<span class="tag" style="background:#f0b4a8">acima do seu nível</span>' : ''}
+        ${it._escudo ? '<span class="tag">Escudo</span>' : ''}${it.cat === 'item' || it.ench ? '<span class="tag item">Mágico</span>' : ''}${nv ? `<small>nív. ${nv}</small>` : ''}${acima ? '<span class="tag" style="background:var(--md-warning-container);color:var(--md-on-warning-container)">acima do seu nível</span>' : ''}
         ${it.custo ? `<small>${po(it.custo)} po</small>` : ''}
         ${pode ? '<button class="btn-rpg-mini" data-ench>✨ Encantar</button>' : ''}
         ${it.ench ? '<button class="btn-rpg-mini" data-desench title="Tirar o encantamento">Desencantar</button>' : ''}

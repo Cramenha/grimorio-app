@@ -1,46 +1,56 @@
 # DESIGN.md — Grimório do Aventureiro
 
-Direção visual já estabelecida (não é proposta nova; transcrita do app existente: `style.css`, `manual/`, `APRESENTACAO.md`).
+Direção substituída a pedido do usuário em 20/10/2026: sai o tema "pergaminho/couro" (versão anterior deste arquivo, histórico no git), entra **Material Design 3** (m3.material.io) com inspiração visual no site oficial **foundryvtt.com** (checado ao vivo no navegador nesta sessão: cores e fontes reais abaixo, não chutadas).
 
 ## Identidade
 
-Ficha de D&D 4e como livro de RPG físico: couro, pergaminho, tinta e ouro. Não é painel de SaaS, não é terminal dev. A tela inteira deve parecer uma mesa de jogo com um grimório aberto.
+App de ficha de D&D 4e com estrutura de produto moderno (M3: tokens de cor, elevação por superfície, componentes com estado) mas alma de mesa de RPG sombria, não de SaaS corporativo. Referência direta: a home da Foundry VTT é escura, quase preta, com texto em tom pergaminho e um único acento âmbar/laranja (o d20 em brasa) — isso é o mood, não o tema antigo deste projeto.
 
 ## Personalidade
 
-Sério, artesanal, antigo. Ornamentado nas bordas (cantos de moldura, linha dupla de ouro), sóbrio no corpo (texto sobre pergaminho, sem brilho nem gradiente chamativo no conteúdo). Nunca "app moderno disfarçado de fantasia": cor e textura vêm de couro/pergaminho/tinta reais, não de glow roxo-azul.
+Sóbrio e escuro por padrão, com um único ponto de calor (âmbar) reservado para ação/destaque. Estrutura previsível e com estados claros (M3), não ornamentada à mão como antes — a moldura de cantos entalhados do tema anterior **sai**.
 
-## Paleta (núcleo: 3 cores + 1 acento, já em `:root` de `style.css`)
+## Paleta M3 (seed colors reais, extraídos de foundryvtt.com nesta sessão)
 
-- **Pergaminho** `--perg #f2e4c0` / `--perg2 #e7d3a2` / `--perg3 #d9bf85` — fundo de conteúdo (folhas, cartas, modais).
-- **Couro** `--couro #1a110b` / `--couro2 #2b1c12` — fundo da página.
-- **Tinta** `--tinta #2b1a0e` / `--tinta2 #5a3d22` — texto sobre pergaminho, bordas, molduras.
-- **Ouro** (acento) `--ouro #b8861b` / `--ouro2 #e0b64a` — título da marca, bordas de destaque (linha dupla no topo, moldura do grimório), nunca no corpo de texto.
-- **Sangue** `--sangue #8e1b1b` / `--sangue2 #b02a2a` — título de seção dentro da folha, links, selo "encontro" das cartas de poder. É o único vermelho; não introduzir outro tom.
-- Neutros fora da contagem: `--negro #222`, branco do texto sobre couro (`#eadfc4`).
-- Selo por tipo de poder (regra de jogo, não decorativa): à vontade = `--verde #2f6b34`, encontro/diário = tons de `--sangue`/preto, item = dourado. Não usar essas 3 cores fora desse selo.
+M3 gera uma paleta tonal completa (0–100) a partir de poucas cores-semente; aqui documento as sementes e os papéis, não listo os 13 tons de cada uma.
 
-## Tipografia
+- **Seed `primary`** = âmbar/laranja do d20 em destaque (~`#E8822C` a `#C9501F` no glow, aferido por captura de tela — faixa aproximada, não pixel exato). Papéis: `primary` (botões preenchidos, foco, ações), `on-primary` (texto sobre ele, quase preto), `primary-container`/`on-primary-container` (superfícies de destaque suave, ex. selo "à vontade" ativo).
+- **Seed `neutral`** = `#0B0A13` (fundo real do body da Foundry, `rgb(11,10,19)`, quase preto com leve matiz azul). Gera `surface`, `surface-dim`, `surface-bright`, `surface-container-lowest/low/container/high/highest` (escala de elevação M3 por tom, não por sombra).
+- **`on-surface`** = `#E7D1B1` (cor de texto real do body da Foundry, `rgb(231,209,177)`, pergaminho claro) — desvio proposital do neutro dessaturado padrão do M3, mantém a alma de RPG; registrado aqui como decisão de marca, não acidente.
+- **Seed `secondary`** = `#9F8475` (borda real dos botões da Foundry, `rgb(159,132,117)`, marrom-acinzentado) — usar em `outline`, bordas de card não preenchido, divisores.
+- **Seed `tertiary`** (opcional, 3º acento) = vermelho-sangue `#8E1B1B`, herdado do tema anterior só para o selo de poder "encontro" (regra de D&D 4e, informação, não decoração — ver Motivos).
+- **`error`** = vermelho M3 padrão (`#B3261E` claro / `#F2B8B5` escuro), não reaproveitar o `tertiary` acima para erro de formulário.
+- Cap do antislop (R-29): núcleo = primary (âmbar) + secondary (marrom-tan) + tertiary (vermelho, só no selo de poder) + 1 error; neutros (a escala `surface`/`on-surface` acima) não contam no limite.
 
-- Títulos: `Cinzel` (serifada romana, maiúsculas largas) — identidade do grimório, nunca trocar por sans-serif.
-- Corpo: `Crimson Pro` — serifada de leitura longa (a ficha tem muito texto corrido).
-- Nunca usar monoespaçada nem uppercase+tracking largo fora de títulos de seção (`.rotulo`, cabeçalhos de tabela).
+## Tipografia (escala M3: Display/Headline/Title/Body/Label, cada um L/M/S)
 
-## Motivos de identidade (repetir, não variar)
+- **Display e Headline**: `Cinzel` (serifada condensada-romana) — mantém o papel que a Foundry dá à sua serifada de marca (`Modesto Condensed`, fonte licenciada da Wizards, não reaproveitável aqui); Cinzel é aberta (Google Fonts) e cumpre o mesmo mood.
+- **Title, Body, Label**: `Signika` — **a mesma fonte que a Foundry usa de verdade** no corpo (`font-family: Signika, "Palatino Linotype", sans-serif`, confirmado via DOM), sans-serif arredondada, de leitura longa. Troca `Crimson Pro` do tema anterior.
+- Tamanhos seguem a escala M3 (Display L 57/M 45/S 36, Headline L 32/M 28/S 24, Title L 22/M 16/S 14, Body L 16/M 14/S 12, Label L 14/M 12/S 11), aplicados em `rem`.
 
-- **Moldura de tinta com 4 cantos ornamentais** (`--canto-tl/tr/bl/br`, SVG embutido): toda "folha" de conteúdo (ficha, modal, cartão) tem essa moldura. É o motivo central do app — sem ele, qualquer pergaminho vira fundo bege genérico.
-- **Linha dupla de ouro** (`border-bottom: 3px double var(--ouro)`) separando barra superior e abas do conteúdo.
-- **Selo de carta por tipo** (verde/vermelho/preto conforme à vontade/encontro/diário): vem da regra de D&D 4e, é informação, não enfeite.
-- Cantos de botão assimétricos (`border-radius` com 4 valores distintos) em vez de pílula — textura "cortado à mão", não arredondado genérico.
+## Forma (shape scale M3, substitui os cantos assimétricos do tema anterior)
+
+`none 0` · `extra-small 4px` (chips, botão pequeno — bate com o `border-radius: 4px` real dos botões da Foundry) · `small 8px` · `medium 12px` (cards) · `large 16px` (modais, folhas) · `extra-large 28px` (hero/CTA grande) · `full` (badge/pill, só para selos de status, não para botão comum).
+
+## Elevação (superfícies M3, substitui a moldura de pergaminho/tinta)
+
+Hierarquia por **tom da superfície** (`surface-container-lowest → highest`, cada um um pouco mais claro que o `surface` base), não por sombra pesada nem textura de papel. Sombra (M3 elevation 0–5) só como reforço leve em elementos flutuantes de verdade (modal, janela de anotação arrastável, dropdown).
+
+## Motivos de identidade (o que muda, o que fica)
+
+- **Sai**: moldura de 4 cantos ornamentais em SVG, textura de pergaminho/radial gradients imitando papel, botões com `border-radius` de 4 valores distintos.
+- **Fica, redesenhado em token M3**: o selo de poder por tipo (verde/vermelho/preto para à vontade/encontro/diário) — é regra de jogo, vira `tertiary-container` tonal em vez de cor chapada; o d20 como ícone de marca (inspirado no d20 em brasa da Foundry, não copiado pixel a pixel) no lugar do emoji genérico atual.
+- **Entra**: state layer M3 em todo elemento interativo — overlay de 8% (hover), 10% (focus/pressed), 16% (dragged) sobre a cor do próprio componente, não um `filter: brightness` solto.
 
 ## Mood / dials (antislop)
 
-- **ENERGY 2** (Balanced): nem GOV.UK sóbrio, nem Awwwards espalhafatoso. Ouro e vermelho pontuam, mas o grosso da tela é pergaminho/tinta calmos.
-- **RHYTHM 2**: todas as telas usam o mesmo sistema de folha+moldura+carta; variação vem do conteúdo (ficha vs. grimório vs. bloco de criatura), não de layout solto.
-- **MOTION 1**: hover sutil (`translateY(-4px) rotate(-.4deg)` nos cartões, `filter: brightness` nos botões), transições de 0,08–0,2s. Sem scroll-reveal, sem parallax, sem fade-in de entrada. O único movimento contínuo é o spinner de carregamento.
+- **ENERGY 2** (Balanced): fundo quase preto e calmo feito a home da Foundry fora do hero; o âmbar pontua ação, não cobre a tela.
+- **RHYTHM 2**: toda tela usa o mesmo sistema de `surface-container` + shape scale; variação vem do conteúdo (ficha vs. grimório vs. bloco de criatura).
+- **MOTION 2** (sobe de 1 para 2 frente ao tema anterior): M3 pede feedback de state layer e ripple em toque/clique, além de hover sutil — ainda sem scroll-reveal nem parallax.
 
 ## O que NÃO fazer aqui (colisão com antislop, decisão registrada)
 
-- Gradiente azul/roxo, glassmorphism, glow em botão: fora de contexto, não aparecem hoje e não devem aparecer.
-- Ícone genérico (sparkle/magic/robot): o app já usa emoji temático (📖🐉💎) ou nenhum ícone; manter.
-- Pílula em tudo: botões e tags já usam cantos assimétricos/retângulo arredondado, não pílula total.
+- Gradiente azul-roxo genérico: o acento é âmbar, não azul/roxo — não confundir com o "Generic Blue-Purple Gradient" do antislop.
+- Glow em tudo (R-13): o d20/ação em destaque pode ter glow âmbar pontual; nunca em card, badge, ícone e borda ao mesmo tempo.
+- Pílula em tudo (R-11): shape scale M3 varia por componente (4/8/12/16/28/full); só selo de status usa `full`.
+- Não copiar a Foundry pixel a pixel (R-30): usar os tokens extraídos como semente de paleta e o mood escuro+âmbar, não clonar o layout do site inteiro.
