@@ -1,24 +1,27 @@
 {
   "name": "fichas-rpg",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Grimório do Aventureiro: fichas e anotações de D&D 4e com compêndio local",
   "main": "electron/main.mjs",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "electron .",
+    "web": "node server.js",
     "desktop": "electron .",
+    "desktop:debug": "electron . --remote-debugging-port=9222",
     "desktop:instalador": "electron-builder --win",
     "desktop:publicar": "electron-builder --win --publish always"
   },
   "dependencies": {
     "@fontsource/cinzel": "^5.3.0",
-    "@fontsource/crimson-pro": "^5.3.0",
+    "@fontsource/signika": "^5.3.0",
     "bootstrap": "^5.3.3",
     "electron-updater": "^6.8.9",
     "pdf-lib": "^1.17.1"
   },
   "devDependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.293",
+    "@reticlehq/browser": "^3.7.0",
     "electron": "^44.8.0",
     "electron-builder": "^26.15.3"
   },
@@ -37,9 +40,10 @@
       "electron/**",
       "extensao-roll20/**",
       "manual/Grimorio-do-Aventureiro-Manual.pdf",
+      "manual/manual.html",
       "!{extrair-,traduzir,revisar-,teste-}*",
       "!verificar-traducao.mjs",
-      "!construir-exe.mjs",
+      "!reticle.local.js",
       "build/icon.ico"
     ],
     "extraResources": [

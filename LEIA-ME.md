@@ -1,9 +1,9 @@
 # Grimório do Aventureiro
 
-Fichas e anotações de **D&D 4ª edição**, no estilo do Character Builder, só que leve. Roda no seu computador (http://localhost:3102); cada amigo roda a própria cópia, com os próprios dados. **Sem IA, sem login e sem internet** (só para baixar o compêndio na primeira vez).
+Fichas e anotações de **D&D 4ª edição**, no estilo do Character Builder, só que leve. É um app desktop que roda no seu computador; cada amigo instala o seu, com os próprios dados. **Sem IA, sem login e sem internet** (a internet só serve para verificar atualizações).
 
 ## Como usar
-1. Dê dois cliques em `iniciar-fichas-rpg.bat` (na pasta acima). Na primeira vez ele instala o necessário e baixa o compêndio do **iws.mx** (~25 MB). A tradução (`compendio\pt.json`) e as regras de cálculo (`compendio\regras.json`) já vêm junto com o app.
+1. Execute o instalador `Grimorio-Setup-X.Y.Z.exe` e abra o atalho **Grimório do Aventureiro**. O compêndio do **iws.mx**, a tradução (`compendio\pt.json`) e as regras de cálculo (`compendio\regras.json`) já vêm no instalador.
 2. Crie um personagem pela própria ficha (raça, classe, atributos, compra de equipamento…). Importar ficha pronta é opcional.
 
 ## Exportar e importar fichas
@@ -28,7 +28,7 @@ Fichas e anotações de **D&D 4ª edição**, no estilo do Character Builder, s�
 Conferido contra as 9 fichas de exemplo do CB (`node teste-calculo.mjs <ficha.dnd4e>`): PV, surtos, iniciativa, velocidade e atributos batem; as defesas diferem no máximo 1 a 3 pontos quando a ficha tem escolhas internas do CB que o app não lê. Em fichas importadas essa diferença fica em **Ajustes manuais** (editável).
 
 ## Arquivos
-`server.js` (rotas), `compendio.mjs` (busca nos dois idiomas), `calculo.mjs` (motor de regras), `pdf-ficha.mjs` (PDF editável: exportar e importar), `importar.mjs` (.dnd4e), `segmentos.mjs`, `index.html`/`app.js`/`style.css` (telas), `baixar-compendio.mjs` (copia o iws.mx). Ferramentas de quem mantém (precisam do Claude e do SDK em devDependencies): `traduzir-tudo.mjs`, `traduzir-nomes.mjs`, `verificar-traducao.mjs` (geram `pt.json`) e `extrair-regras.mjs` (gera `regras.json` a partir da pasta do CB). Dados do usuário em `dados\` (personagens; excluídos vão para `dados\lixeira`).
+`server.js` (rotas), `compendio.mjs` (busca nos dois idiomas), `calculo.mjs` (motor de regras), `pdf-ficha.mjs` (PDF editável: exportar e importar), `importar.mjs` (.dnd4e), `segmentos.mjs`, `index.html`/`app.js`/`style.css` (telas), `baixar-compendio.mjs` (copia o iws.mx). Ferramentas de quem mantém (precisam do Claude e do SDK em devDependencies): `traduzir-tudo.mjs`, `traduzir-nomes.mjs`, `verificar-traducao.mjs` (geram `pt.json`) e `extrair-regras.mjs` (gera `regras.json` a partir da pasta do CB). `electron/main.mjs` abre o app desktop com esse mesmo servidor. Dados do usuário em `%APPDATA%\Grimório do Aventureiro\dados` (personagens; excluídos vão para `lixeira\`); com `npm run web`, em `dados\` ao lado do código.
 
 ## Limites
 - Escolhas internas do CB (benefícios de antecedente, algumas características de classe do núcleo) podem exigir ajuste manual de 1 a 3 pontos.

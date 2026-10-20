@@ -75,6 +75,14 @@ function ligarIdioma() {
   b.textContent = IDIOMA === 'pt' ? '🌐 Português' : '🌐 English';
   b.onclick = () => { IDIOMA = IDIOMA === 'pt' ? 'en' : 'pt'; localStorage.setItem('idioma', IDIOMA); ligarIdioma(); redesenharTextos(); };
 }
+// tema: o estado inicial vem do tema.js (sistema ou escolha salva); o botão troca e grava a escolha
+function ligarTema() {
+  const b = $('#btn-tema');
+  const claro = temaAtual() === 'claro';
+  b.textContent = claro ? '☀ Claro' : '☾ Escuro';
+  b.title = claro ? 'Tema claro. Clique para usar o escuro' : 'Tema escuro. Clique para usar o claro';
+  b.onclick = () => { escolherTema(claro ? 'escuro' : 'claro'); ligarTema(); };
+}
 function redesenharTextos() {
   if ($('#grimorio.show') || document.body.classList.contains('gr-pagina')) desenharGrimorio();
   if ($('#modalLeitor.show') && leitorAtual) abrirLeitor(leitorAtual.cat, leitorAtual.id);
@@ -351,7 +359,7 @@ async function escolher(opcoes) {
   const lista = await listaClasses();
 
   const montarFiltros = () => {
-    const abas = cats.length > 1 ? `<div class="col-12 d-flex gap-1 flex-wrap">${cats.map((c) => `<button class="btn-rpg-mini ${c === cat ? 'fw-bold' : ''}" data-cat="${c}" style="${c === cat ? 'background:var(--ouro2)' : ''}">${NOME_CAT[c]}</button>`).join('')}</div>` : '';
+    const abas = cats.length > 1 ? `<div class="col-12 d-flex gap-1 flex-wrap">${cats.map((c) => `<button class="btn-rpg-mini ${c === cat ? 'fw-bold' : ''}" data-cat="${c}" style="${c === cat ? 'background:var(--md-secondary-container);color:var(--md-on-secondary-container)' : ''}">${NOME_CAT[c]}</button>`).join('')}</div>` : '';
     $('#pk-filtros').innerHTML = abas + `
       ${opcoes.aviso ? `<div class="col-12 rotulo">${opcoes.aviso}</div>` : ''}
       <div class="col-md-4"><input class="form-control" id="pk-q" placeholder="Nome ou texto (inglês ou português)…" value="${esc(f.q)}"></div>
@@ -433,13 +441,13 @@ async function desenharHome() {
   const vazio = Object.values(comp.categorias).every((c) => !c.itens);
   el.innerHTML = `
     ${vazio ? `<div class="folha mb-3"><h3>📜 Compêndio ainda não baixado</h3><p>Preciso copiar o compêndio do <b>iws.mx</b> uma vez (cerca de 25 MB, alguns minutos). Depois tudo funciona sem internet.</p><button class="btn-rpg" id="baixar-comp">Baixar compêndio agora</button> <span id="baixar-info"></span></div>` : ''}
-    <div class="d-flex align-items-center mb-3 gap-2 flex-wrap"><h2 class="titulo m-0 flex-grow-1" style="color:var(--ouro2)">Seus aventureiros</h2>
+    <div class="d-flex align-items-center mb-3 gap-2 flex-wrap"><h2 class="titulo m-0 flex-grow-1" style="color:var(--md-primary)">Seus aventureiros</h2>
       <label class="btn-rpg-sec m-0" title="Aceita .dnd4e (Character Builder), .json (ficha exportada daqui) e PDF">📥 Importar ficha<input type="file" id="arq-imp" accept=".pdf,.dnd4e,.xml,.json" hidden></label>
       <button class="btn-rpg" id="novo-pers">＋ Novo personagem</button>
-      <button class="btn-rpg" id="nova-criatura" style="background:linear-gradient(#8e1b1b,#5a1111)" title="Monstros, chefes e NPCs para o mestre">🐉 Nova criatura</button></div>
+      <button class="btn-rpg" id="nova-criatura" style="background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)" title="Monstros, chefes e NPCs para o mestre">🐉 Nova criatura</button></div>
     <div class="row g-3">${lista.filter((p) => p.tipo !== 'criatura').map(cartaoHome).join('')}
       ${lista.some((p) => p.tipo !== 'criatura') ? '' : '<div class="col-12"><div class="folha cartao-novo">Nenhum personagem ainda. Crie um novo ou importe uma ficha.</div></div>'}</div>
-    ${lista.some((p) => p.tipo === 'criatura') ? `<h2 class="titulo mt-4 mb-3" style="color:var(--ouro2)">Criaturas do mestre</h2><div class="row g-3">${lista.filter((p) => p.tipo === 'criatura').map(cartaoHome).join('')}</div>` : ''}`;
+    ${lista.some((p) => p.tipo === 'criatura') ? `<h2 class="titulo mt-4 mb-3" style="color:var(--md-primary)">Criaturas do mestre</h2><div class="row g-3">${lista.filter((p) => p.tipo === 'criatura').map(cartaoHome).join('')}</div>` : ''}`;
   rodapeDados(el);
   $('#novo-pers').onclick = async () => { const p = await api('/api/personagens', { method: 'POST', body: {} }); abrirPersonagem(p.id); };
   $('#nova-criatura').onclick = novaCriaturaUI;
@@ -476,7 +484,7 @@ async function importar(arq) {
   if (!arq) return;
   const el = $('#principal');
   const pdf = /\.pdf$/i.test(arq.name);
-  el.innerHTML = `<div class="folha carregando" style="color:var(--tinta)"><span class="spin"></span> Lendo <b>${esc(arq.name)}</b>…</div>`;
+  el.innerHTML = `<div class="folha carregando"><span class="spin"></span> Lendo <b>${esc(arq.name)}</b>…</div>`;
   try {
     const base64 = await new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(r.result.split(',')[1]); r.onerror = no; r.readAsDataURL(arq); });
     let r = await api('/api/importar', { method: 'POST', body: { nome: arq.name, base64 } });
@@ -493,7 +501,7 @@ Cancelar = criar uma ficha NOVA separada`) ? 'atualizar' : 'nova';
     abrirPersonagem(f.id);
   } catch (e) {
     await desenharHome();
-    $('#principal').insertAdjacentHTML('afterbegin', `<div class="folha mb-3" style="border-color:var(--sangue)"><h3>Não consegui importar ${esc(arq.name)}</h3><p class="mb-1">${esc(e.message)}</p>${pdf ? '<p class="mb-0 rotulo">Dica: abra a ficha no app e use ⬇ PDF editável; esse PDF você preenche no leitor de PDF e importa de volta.</p>' : ''}<button class="btn-rpg-mini mt-2" onclick="this.closest('.folha').remove()">Fechar</button></div>`);
+    $('#principal').insertAdjacentHTML('afterbegin', `<div class="folha mb-3" style="border-color:var(--md-error)"><h3>Não consegui importar ${esc(arq.name)}</h3><p class="mb-1">${esc(e.message)}</p>${pdf ? '<p class="mb-0 rotulo">Dica: abra a ficha no app e use ⬇ PDF editável; esse PDF você preenche no leitor de PDF e importa de volta.</p>' : ''}<button class="btn-rpg-mini mt-2" onclick="this.closest('.folha').remove()">Fechar</button></div>`);
   }
 }
 
@@ -522,12 +530,18 @@ function desenharFicha() {
       <div class="flex-grow-1" style="min-width:230px"><input class="nome-grande" value="${esc(P.nome)}" placeholder="Nome do personagem">
         <div class="rotulo mt-1" id="resumo-linha"></div></div>
       <div class="text-end"><button class="btn-rpg" id="abrir-grimorio">📖 Abrir grimório de poderes</button>
-        <button class="btn-rpg-sec btn-sm" id="exportar-pdf" title="Ficha em PDF com campos editáveis: preencha no leitor de PDF e importe de volta">⬇ PDF editável</button>
-        <button class="btn-rpg-sec btn-sm" id="exportar-cb" title="Arquivo .dnd4e no formato do Character Builder (abre no CB e em quem lê esse formato)">⬇ .dnd4e (Character Builder)</button>
-        <button class="btn-rpg-mini" id="exportar" title="Arquivo .json da ficha (cópia exata, para guardar ou mandar a um amigo)">.json</button>
-        <button class="btn-rpg-sec btn-sm" id="copiar-r20" title="Copia a ficha pronta para o Roll20 (cole nas notas de um handout e use !grimorio-importar)">📋 Copiar p/ Roll20</button>
-        <button class="btn-rpg-mini" id="baixar-r20" title="Baixa o mesmo conteúdo como arquivo .roll20.json">.roll20.json</button>
-        <a class="btn-rpg-mini" href="/api/importador-roll20" title="Script (Roll20 Pro) que lê a ficha dentro do Roll20. Instale uma vez em Configurações do jogo > Mod (API) Scripts">script Roll20</a>
+        <div class="mt-2">
+          <select class="btn-rpg-mini" id="sel-sistema" title="Sistema de RPG desta ficha" disabled><option value="dnd4e">D&D 4e</option></select>
+          <select class="btn-rpg-mini" id="sel-plataforma" title="Onde esta ficha vai ser usada: muda quais botões de exportação aparecem">
+            <option value="nenhuma">Exportar para: nenhuma plataforma</option>
+            <option value="roll20">Exportar para: Roll20</option>
+            <option value="foundry">Exportar para: Foundry VTT</option>
+          </select>
+        </div>
+        <div class="mt-2" id="botoes-plataforma"></div>
+        <div class="mt-2"><button class="btn-rpg-sec btn-sm" id="exportar-pdf" title="Ficha em PDF com campos editáveis: preencha no leitor de PDF e importe de volta">⬇ PDF editável</button>
+        <button class="btn-rpg-sec btn-sm" id="exportar-cb" title="Arquivo .dnd4e no formato do Character Builder: todo personagem de D&D 4e tem esse botão, para abrir no CB">⬇ .dnd4e (Character Builder)</button>
+        <button class="btn-rpg-mini" id="exportar" title="Arquivo .json da ficha (cópia exata, para guardar ou mandar a um amigo)">.json</button></div>
         <div class="mt-2"><button class="btn-rpg-mini" id="salvar-agora" title="Grava a ficha agora (também grava sozinha a cada alteração)">💾 Salvar</button> <span class="rotulo" id="status-salvo">Salvo ✓ ${dataBR(P.atualizado)}</span></div></div>
       <input type="file" id="arq-ret" accept="image/*" hidden></div>
       <div id="painel-avisos" class="mt-2"></div></div>
@@ -543,24 +557,58 @@ function desenharFicha() {
     if (!r.ok) throw new Error((await r.json().catch(() => ({}))).erro || 'Falha ao gerar a ficha do Roll20.');
     return r.json();
   }
-  $('#copiar-r20').onclick = async (e) => {
-    e.target.disabled = true;
-    try {
-      const f = await fichaRoll20();
-      await copiarTexto(JSON.stringify(f));
-      toast('Ficha copiada. No Roll20: clique no botão "Grimório" (extensão), cole e importe. Com o plano Pro: cole nas notas de um handout chamado "' + esc(P.nome) + '" e digite !grimorio-importar ' + esc(P.nome) + (f.avisos?.length ? '. Atenção: ' + esc(f.avisos[0]) : ''), false, 14000);
-    } catch (err) { toast('Roll20: ' + esc(err.message), true, 8000); }
-    e.target.disabled = false;
-  };
-  $('#baixar-r20').onclick = async (e) => {
-    e.target.disabled = true;
-    try {
-      const f = await fichaRoll20();
-      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(f)], { type: 'application/json' })); a.download = (P.nome || 'ficha').replace(/[^\w-]+/g, '_') + '.roll20.json'; a.click();
-      toast('Arquivo salvo. Abra no Bloco de Notas, copie tudo e cole nas notas de um handout do Roll20.', false, 9000);
-    } catch (err) { toast('Roll20: ' + esc(err.message), true, 8000); }
-    e.target.disabled = false;
-  };
+  async function fichaFoundry() {
+    await salvarAgora();
+    const r = await fetch(`/api/exportar-foundry?lang=${IDIOMA}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(P) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.erro || 'Falha ao gerar o Foundry .json.');
+    return d;
+  }
+  // Botões de exportação específicos da plataforma escolhida (Roll20/Foundry): só aparecem os desta plataforma,
+  // em vez de empilhar todos os "copiar para X" juntos. PDF/.json/.dnd4e ficam sempre visíveis (universais).
+  function desenharBotoesPlataforma() {
+    const box = $('#botoes-plataforma');
+    if (P.plataforma === 'roll20') {
+      box.innerHTML = `<button class="btn-rpg-sec btn-sm" id="copiar-r20" title="Copia a ficha pronta para o Roll20 (cole nas notas de um handout e use !grimorio-importar)">📋 Copiar p/ Roll20</button>
+        <button class="btn-rpg-mini" id="baixar-r20" title="Baixa o mesmo conteúdo como arquivo .roll20.json">.roll20.json</button>
+        <a class="btn-rpg-mini" href="/api/importador-roll20" title="Script (Roll20 Pro) que lê a ficha dentro do Roll20. Instale uma vez em Configurações do jogo > Mod (API) Scripts">script Roll20</a>`;
+      $('#copiar-r20').onclick = async (e) => {
+        e.target.disabled = true;
+        try {
+          const f = await fichaRoll20();
+          await copiarTexto(JSON.stringify(f));
+          toast('Ficha copiada. No Roll20: clique no botão "Grimório" (extensão), cole e importe. Com o plano Pro: cole nas notas de um handout chamado "' + esc(P.nome) + '" e digite !grimorio-importar ' + esc(P.nome) + (f.avisos?.length ? '. Atenção: ' + esc(f.avisos[0]) : ''), false, 14000);
+        } catch (err) { toast('Roll20: ' + esc(err.message), true, 8000); }
+        e.target.disabled = false;
+      };
+      $('#baixar-r20').onclick = async (e) => {
+        e.target.disabled = true;
+        try {
+          const f = await fichaRoll20();
+          const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(f)], { type: 'application/json' })); a.download = (P.nome || 'ficha').replace(/[^\w-]+/g, '_') + '.roll20.json'; a.click();
+          toast('Arquivo salvo. Abra no Bloco de Notas, copie tudo e cole nas notas de um handout do Roll20.', false, 9000);
+        } catch (err) { toast('Roll20: ' + esc(err.message), true, 8000); }
+        e.target.disabled = false;
+      };
+    } else if (P.plataforma === 'foundry') {
+      box.innerHTML = `<button class="btn-rpg-sec btn-sm" id="baixar-foundry" title="Arquivo .json de Actor para importar direto no Foundry (Import Data, na ficha do personagem)">⬇ Foundry .json</button>`;
+      $('#baixar-foundry').onclick = async (e) => {
+        e.target.disabled = true;
+        try {
+          const d = await fichaFoundry();
+          const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(d.json, null, 1)], { type: 'application/json' })); a.download = (P.nome || 'ficha').replace(/[^\w-]+/g, '_') + '.foundry.json'; a.click();
+          toast(d.avisos?.length ? `Arquivo gerado. ${d.avisos.length} item(ns) sem correspondência no compêndio ficaram de fora: ${d.avisos.slice(0, 3).join(' · ')}` : 'Arquivo gerado. No Foundry: abra o personagem e use Import Data (ícone de importar, no topo da ficha).', false, 10000);
+        } catch (err) { toast('Foundry: ' + esc(err.message), true, 8000); }
+        e.target.disabled = false;
+      };
+    } else {
+      box.innerHTML = '';
+    }
+  }
+  P.plataforma = P.plataforma || 'nenhuma';
+  $('#sel-plataforma').value = P.plataforma;
+  $('#sel-plataforma').onchange = (e) => { P.plataforma = e.target.value; agendarSalvar(); desenharBotoesPlataforma(); };
+  desenharBotoesPlataforma();
   $('#salvar-agora').onclick = salvarAgora;
   $('#exportar-cb').onclick = async (e) => {
     e.target.disabled = true;
@@ -820,7 +868,7 @@ async function escolherVariante(cat, id, nome, extra = {}) {
   return new Promise((resolve) => {
     $('#leitor').innerHTML = `<h3>${esc(nome)}</h3><p class="text-muted">Seu personagem é nível <b>${P.nivel}</b>. Ouro: <b>${po(P.ouro)} po</b>.</p>
       <div id="vars">${vs.map((v, i) => `<label class="lista-item" style="cursor:pointer"><input type="radio" name="var" value="${i}" ${v === padrao ? 'checked' : ''}>
-        <span class="nm">${v.mais ? '+' + v.mais : 'Padrão'} · nível ${v.nivel}</span>${v.nivel > P.nivel ? '<span class="tag" style="background:#f0b4a8">acima do seu nível</span>' : ''}<b>${po(v.custo)} po</b></label>`).join('')}</div>
+        <span class="nm">${v.mais ? '+' + v.mais : 'Padrão'} · nível ${v.nivel}</span>${v.nivel > P.nivel ? '<span class="tag" style="background:var(--md-warning-container);color:var(--md-on-warning-container)">acima do seu nível</span>' : ''}<b>${po(v.custo)} po</b></label>`).join('')}</div>
       <label class="mt-2 d-block"><input type="checkbox" id="var-desc" checked> Descontar do ouro</label>
       <div class="text-end mt-2"><button class="btn-rpg-mini" id="var-cancel">Cancelar</button> <button class="btn-rpg" id="var-ok">${extra.rotuloOk || 'Comprar'}</button></div>`;
     modal('modalLeitor').show();
@@ -870,7 +918,7 @@ async function abaInventario() {
       const pode = ['armor', 'weapon', 'implement'].includes(it.cat) && it.base?.id && !it.ench;
       return `<div class="lista-item" data-id="${it.id}"><input type="checkbox" class="form-check-input" data-eq title="Equipado (os bônus entram no cálculo)" ${it.equipado ? 'checked' : ''}>
         <span class="nm" data-ver>${esc(nomeItem(it))}</span>${it.ench?.id || it.ref?.id ? btnMacro(it.ench?.id || it.ref.id) : ''}
-        ${it._escudo ? '<span class="tag">Escudo</span>' : ''}${it.cat === 'item' || it.ench ? '<span class="tag item">Mágico</span>' : ''}${nv ? `<small>nív. ${nv}</small>` : ''}${acima ? '<span class="tag" style="background:#f0b4a8">acima do seu nível</span>' : ''}
+        ${it._escudo ? '<span class="tag">Escudo</span>' : ''}${it.cat === 'item' || it.ench ? '<span class="tag item">Mágico</span>' : ''}${nv ? `<small>nív. ${nv}</small>` : ''}${acima ? '<span class="tag" style="background:var(--md-warning-container);color:var(--md-on-warning-container)">acima do seu nível</span>' : ''}
         ${it.custo ? `<small>${po(it.custo)} po</small>` : ''}
         ${pode ? '<button class="btn-rpg-mini" data-ench>✨ Encantar</button>' : ''}
         ${it.ench ? '<button class="btn-rpg-mini" data-desench title="Tirar o encantamento">Desencantar</button>' : ''}
@@ -923,7 +971,7 @@ function abaNotas() {
   c.innerHTML = `<div class="folha"><div class="d-flex gap-2 flex-wrap align-items-center mb-2"><h2 class="flex-grow-1 mb-0">Janelas de anotações</h2>
     <button class="btn-rpg" id="nova-nota">＋ Nova janela de anotações</button></div>
     <p class="text-muted">Cada janela é um bloco de notas separado, com nome editável. Elas ficam flutuando por cima da tela (arraste, redimensione, minimize) e tudo é salvo sozinho no histórico do personagem.</p>
-    <div class="row g-2">${P.notas.map((n) => `<div class="col-md-6 col-lg-4"><div class="folha h-100" style="padding:.7rem .9rem"><div class="d-flex gap-2"><b class="flex-grow-1 titulo" style="color:var(--sangue)">${esc(n.titulo)}</b>
+    <div class="row g-2">${P.notas.map((n) => `<div class="col-md-6 col-lg-4"><div class="folha h-100" style="padding:.7rem .9rem"><div class="d-flex gap-2"><b class="flex-grow-1 titulo" style="color:var(--md-primary)">${esc(n.titulo)}</b>
       <button class="btn-rpg-mini" data-abrir="${n.id}">${n.janela?.aberta ? 'Trazer' : 'Abrir'}</button><button class="btn-rpg-mini" data-excl="${n.id}">🗑</button></div>
       <div class="rotulo">editado ${dataBR(n.editado)} · ${(n.texto || '').length} caract.</div>
       <div style="max-height:4.6rem;overflow:hidden;white-space:pre-wrap;font-size:.95rem">${esc((n.texto || '').slice(0, 220))}</div></div></div>`).join('')}</div></div>`;
@@ -1086,15 +1134,15 @@ $('#btn-config').onclick = async () => {
 // ============================================================ início
 addEventListener('beforeunload', () => { if (P && !GRIM_ID) navigator.sendBeacon?.('/api/personagens/' + P.id, new Blob([JSON.stringify(P)], { type: 'application/json' })); });
 // atualizações (Releases do GitHub): botão discreto "↻"; se houver versão nova vira "Baixar atualização"
-const TXT_ATU = { pt: { verificar: 'Verificar atualizações', atual: 'Você já está na versão mais recente', baixar: 'Baixar atualização', baixando: 'Baixando e instalando… o Grimório vai reiniciar', erro: 'Não foi possível verificar agora', indisp: 'Atualizações indisponíveis (repositório ainda não é público)', nova: 'Versão' },
-  en: { verificar: 'Check for updates', atual: 'You are on the latest version', baixar: 'Download update', baixando: 'Downloading and installing… Grimoire will restart', erro: 'Could not check right now', indisp: 'Updates unavailable (repository is not public yet)', nova: 'Version' } };
+const TXT_ATU = { pt: { verificar: 'Verificar atualizações', atual: 'Você já está na versão mais recente', baixar: 'Baixar atualização', baixando: 'Baixando e instalando… o Grimório vai reiniciar', erro: 'Não foi possível verificar agora', indisp: 'Atualizações indisponíveis (repositório ainda não é público)', dev: 'Atualizações só no app instalado', nova: 'Versão' },
+  en: { verificar: 'Check for updates', atual: 'You are on the latest version', baixar: 'Download update', baixando: 'Downloading and installing… Grimoire will restart', erro: 'Could not check right now', indisp: 'Updates unavailable (repository is not public yet)', dev: 'Updates only in the installed app', nova: 'Version' } };
 let atuNova = null;
 async function verificarAtualizacao(manual) {
   const b = $('#btn-atualizar'), t = TXT_ATU[IDIOMA];
   try {
     const v = await api('/api/versao' + (manual ? '?forcar=1' : ''));
     if (v.ok && v.nova) { atuNova = v; b.textContent = '⬇ ' + t.baixar + ' v' + v.ultima; b.title = (v.notas || '').slice(0, 300); b.classList.add('btn-rpg'); b.classList.remove('btn-discreto', 'btn-rpg-sec'); }
-    else if (manual) toast(v.ok ? t.atual + ' (v' + v.atual + ')' : (v.motivo === 'sem-release' ? t.indisp : t.erro), !v.ok);
+    else if (manual) toast(v.ok ? t.atual + ' (v' + v.atual + ')' : (v.motivo === 'sem-release' ? t.indisp : v.motivo === 'dev' ? t.dev : t.erro), !v.ok && v.motivo !== 'dev');
   } catch { if (manual) toast(t.erro, true); }
 }
 function ligarAtualizacao() {
@@ -1110,6 +1158,9 @@ function ligarAtualizacao() {
 }
 
 ligarIdioma();
+ligarTema();
+matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => setTimeout(ligarTema)); // o tema.js troca primeiro
+$('#btn-manual').onclick = () => window.open('manual/manual.html', 'manual', 'width=900,height=1000');
 ligarAtualizacao();
 if (GRIM_ID) abrirGrimorioPagina(GRIM_ID); else desenharHome();
 

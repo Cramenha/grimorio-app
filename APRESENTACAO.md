@@ -1,7 +1,7 @@
 # Grimório do Aventureiro
 ### Fichas, compêndio e mesa de D&D 4ª edição — grátis, no seu computador, em português
 
-Para quem nunca superou o Character Builder, e para quem sente falta dele: o **Grimório do Aventureiro** é um aplicativo local de D&D 4e que monta e calcula fichas, traz o compêndio inteiro **traduzido para o português**, cria criaturas para o mestre e entrega tudo pronto para o **Roll20**. Sem conta, sem assinatura, sem login e sem IA em tempo de uso: você dá dois cliques em um arquivo e abre no navegador.
+Para quem nunca superou o Character Builder, e para quem sente falta dele: o **Grimório do Aventureiro** é um aplicativo local de D&D 4e que monta e calcula fichas, traz o compêndio inteiro **traduzido para o português**, cria criaturas para o mestre e entrega tudo pronto para o **Roll20**. Sem conta, sem assinatura, sem login e sem IA em tempo de uso: você instala uma vez e abre pelo atalho, numa janela própria.
 
 ---
 
@@ -15,7 +15,7 @@ Para quem nunca superou o Character Builder, e para quem sente falta dele: o **G
 | **~3.600** itens mágicos, armas, armaduras e implementos | **77** classes · **55** raças · **577** trilhas exemplares |
 | **116** temas · **817** antecedentes · **115** destinos épicos | **134** divindades · **360** rituais |
 | **3.664** elementos de regra lidos para o cálculo automático | **9** fichas reais do Character Builder usadas para conferir o cálculo |
-| **100 poderes** por ficha exportados ao Roll20 | **~19 MB** zipado, funciona sem internet |
+| **100 poderes** por ficha exportados ao Roll20 | instalador de **~126 MB**, funciona sem internet |
 
 Tudo vem do 4e Database do iws.mx (fonte não oficial de terceiros). O aplicativo é pessoal e gratuito, e cada jogador roda a própria cópia com os próprios dados.
 
@@ -65,8 +65,8 @@ Tudo vem do 4e Database do iws.mx (fonte não oficial de terceiros). O aplicativ
 ---
 
 ## Como usar
-1. Baixe o zip, extraia e dê dois cliques em **INICIAR GRIMORIO.bat**. Se faltar o Node.js, ele instala sozinho.
-2. O navegador abre em `http://localhost:3102`. O compêndio e a tradução já vêm no pacote.
+1. Baixe e execute o instalador **Grimorio-Setup**. Não precisa instalar mais nada.
+2. Abra o atalho **Grimório do Aventureiro**. O compêndio e a tradução já vêm no instalador.
 3. Crie uma ficha (ou importe a sua), compre e equipe os itens e copie as macros para a sua mesa.
 
 ## O que ainda é honesto avisar
